@@ -15,7 +15,7 @@ paths:
 #         in: query
 #       - ...
 #     x-amazon-apigateway-integration:
-#       uri: "${api_resolver}"
+#       uri: "${uri}"
 #       httpMethod: "POST"
 #       type:  "aws_proxy"
 #     responses:
