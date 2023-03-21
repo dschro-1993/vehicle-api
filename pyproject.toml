@@ -8,6 +8,7 @@ disable = [
   "R0903",
   "W0511",
   "W0622",
+  "W0611",
 ]
 
 [tool.pylint.format]

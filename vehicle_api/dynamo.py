@@ -10,7 +10,7 @@ from aws_lambda_powertools import Logger
 logger = Logger()
 
 class Dynamo:
-  """"""
+  """Dynamo-Class"""
   def __init__(self) -> None:
     """
     https://docs.aws.amazon.com/cli/latest/reference/dynamodb

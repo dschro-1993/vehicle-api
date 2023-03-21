@@ -6,7 +6,7 @@ from models import Vehicle
 ToExclude = set() # Todo
 
 class Mapper:
-  """"""
+  """Mapper-Class"""
   def as_DTO(self, vehicle: Vehicle) -> Union[dict, None]:
     """
     Vehicle-Entity => DTO
