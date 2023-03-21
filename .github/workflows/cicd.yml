@@ -19,11 +19,13 @@ jobs:
         ports:
           - 8000:8000
     steps:
-      - uses: actions/checkout@v3
+      - name: Check-Out
+        uses: actions/checkout@v3
       - name: Install Poetry
         run: |
           pipx install poetry==1.4.0
-      - uses: actions/setup-python@v4
+      - name: Install Python
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9 # => Required by λ-Service
           cache: poetry
@@ -57,15 +59,19 @@ jobs:
         with:
           aws-region:     eu-west-1
           role-to-assume: arn:aws:iam::292372118261:role/my-github-actions-role
-      - uses: actions/checkout@v3
+      - name: Check-Out
+        uses: actions/checkout@v3
+
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
+
       - name: terraform-init
         run:  terraform init
 #     - tf-validate
-#     - tf-diff # => Output diff as comment in PR
+#     - tf-diff # => Create/Update diff as Comment in PR
       - name: terraform-apply
         run:  terraform apply --auto-approve
+
 #     - smoke-tests
 #     - ...
 #   ...
