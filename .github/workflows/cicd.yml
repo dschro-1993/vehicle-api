@@ -36,7 +36,7 @@ jobs:
       AWS_DEFAULT_OUTPUT:    json
     defaults:
       run:
-        working-directory: terraform/qa # TBD
+        working-directory: ./terraform/qa # TBD
     steps:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
