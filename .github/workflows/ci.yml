@@ -9,7 +9,7 @@ jobs:
     services:
       dynamodb:
         image: amazon/dynamodb-local
-    container: ghcr.io/dschro-1993/vehicle-api:latest # Has Poetry installed
+    container: ghcr.io/dschro-1993/vehicle-api:latest # Has Poetry pre-installed
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
