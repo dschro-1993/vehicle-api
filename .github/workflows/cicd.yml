@@ -5,18 +5,32 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     services:
       dynamodb:
         image: amazon/dynamodb-local
         ports:
           - 8000:8000
-    container: ghcr.io/dschro-1993/vehicle-api:latest # Has Poetry pre-installed
+    env: # => To make BOTO3 happy
+      AWS_ACCESS_KEY_ID:     AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: AWS_SECRET_ACCESS_KEY
+      AWS_DEFAULT_REGION:    eu-west-1
+      AWS_DEFAULT_OUTPUT:    json
     steps:
       - uses: actions/checkout@v3
-      - name: Install all Dependencies
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9 # => Required by λ-Service
+          cache: poetry
+      - name: Install Poetry
+        run: |
+          pipx install poetry==1.4.0
+      - name: Install all (Dev-)Dependencies
         run: |
           poetry install
+      - name: Run pylint
+        run: |
+          poetry run pylint vehicle_api/
       - name: Run unit-tests
         run: |
           poetry run coverage run -m pytest tests/unit
@@ -25,24 +39,24 @@ jobs:
         run: |
           poetry run coverage run -m pytest tests/intr
           poetry run coverage report -m
-  cd:
-    runs-on: ubuntu-20.04
-    needs: ci
-    environment: qa # TBD
-    env:
-      AWS_ACCESS_KEY_ID:     ${{secrets.AWS_ACCESS_KEY_ID}}
-      AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}} # TBD: GH-OIDC
-      AWS_DEFAULT_REGION:    eu-west-1
-      AWS_DEFAULT_OUTPUT:    json
-    defaults:
-      run:
-        working-directory: ./terraform/qa # TBD
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
-      - name: terraform-init
-        run:  terraform init
+# cd:
+#   runs-on: ubuntu-latest
+#   needs: ci
+#   environment: qa # TBD
+#   env:
+#     AWS_ACCESS_KEY_ID:     ${{secrets.AWS_ACCESS_KEY_ID}}
+#     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}} # TBD: Assume OIDC-Role
+#     AWS_DEFAULT_REGION:    eu-west-1
+#     AWS_DEFAULT_OUTPUT:    json
+#   defaults:
+#     run:
+#       working-directory: ./terraform/qa # TBD
+#   steps:
+#     - uses: actions/checkout@v3
+#     - name: Install Terraform
+#       uses: hashicorp/setup-terraform@v2
+#     - name: terraform-init
+#       run:  terraform init
 #     - tf-validate
 #     - tf-diff
 #     - ...
