@@ -3,7 +3,7 @@
 ## Overview
 
 <!-- ![.](./docs/overview.jpg) -->
-<img src="./docs/overview.jpg" width="600" height="500">
+<img src="./docs/overview.jpg" width="750" height="650">
 
 ## Prerequisites
 
