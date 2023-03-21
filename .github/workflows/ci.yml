@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  - push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    services:
+      dynamodb:
+        image: amazon/dynamodb-local
+    steps:
+      - uses: actions/checkout@v3
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9" # => Required by λ
+      - name: Installation
+        run: |
+          poetry install
+      - name: Run unit-tests
+        run: |
+          poetry run coverage run -m pytest tests/unit
+      - name: Run intr-tests
+        run: |
+          poetry run coverage run -m pytest tests/intr
+#     - tf-init
+#     - tf-validate
+#     - tf-diff
+#     - ...
+#   ...
+# ...

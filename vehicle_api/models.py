@@ -2,7 +2,20 @@
 
 import inspect
 
-from pydantic import BaseModel
+from uuid import UUID
+from enum import Enum
+
+from pydantic import BaseModel, constr
+
+class Vendor(
+  str,
+  Enum,
+):
+  """Enum for Vendor"""
+  VW = "VW"
+  BMW = "BMW"
+  AUDI = "AUDI"
+  # ...
 
 def optional(*fields) -> any:
   """
@@ -25,11 +38,12 @@ class Shared(BaseModel):
   """
   Attributes shared across all Vehicle-Objects
   """
-  vin:        str
-  vendor:     str
+  vin:        constr(min_length=17, max_length=17)
+  vendor:     Vendor
   model_type: str
   model_name: str
   power:      str
+  # ...
 
 @optional
 class VehicleUpdateRequest(Shared):

@@ -16,7 +16,7 @@ class Dynamo:
     https://docs.aws.amazon.com/cli/latest/reference/dynamodb
     """
     ENDPOINT = os.environ.get("ENDPOINT", None)
-    DDBTABLE = os.environ.get("DDBTABLE", "Vehicles")
+    DDBTABLE = os.environ.get("DDBTABLE", None)
 
     # config=Config(tcp_keepalive=True)
     self.table = (

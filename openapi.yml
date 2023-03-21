@@ -119,14 +119,23 @@ paths:
           description: BAD REQUEST
 components:
   schemas:
+    Vendor:
+      type: string
+      enum:
+        - VW
+        - BMW
+        - AUDI
+      # - ...
     VehicleCreateRequest:
       type: object
       properties:
         vin:
           type: string
         vendor:
+          $ref: "#/components/schemas/Vendor"
+        model_type:
           type: string
-        torque:
+        model_name:
           type: string
         power:
           type: string
@@ -137,21 +146,24 @@ components:
         vin:
           type: string
         vendor:
+          $ref: "#/components/schemas/Vendor"
+        model_type:
           type: string
-        torque:
+        model_name:
           type: string
         power:
           type: string
     # required: []
-
     Vehicle:
       type: object
       properties:
         vin:
           type: string
         vendor:
+          $ref: "#/components/schemas/Vendor"
+        model_type:
           type: string
-        torque:
+        model_name:
           type: string
         power:
           type: string
