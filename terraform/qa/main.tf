@@ -4,7 +4,7 @@ module "vehicle_api" {
   openapi_spec_path = "${path.module}/../../openapi.yml"
   code_path         = "${path.module}/../../vehicle_api"
   zone_name         = "292372118261.starfish-rentals.com"
-  dd_lambda_handler = "api_resolver.lambda_handler"
+  app_handler       = "api_resolver.lambda_handler"
   app_version       = var.app_version
   env               = "qa"
 }
