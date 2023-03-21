@@ -1,9 +1,12 @@
 name: cicd
 
-# Todo:
+# Flows: => Environment Separation
 # - Default Branch (main)
 # - Feature Branch
 # - Pull Request
+
+# Todos:
+# - Release.yml
 
 on:
   push:
