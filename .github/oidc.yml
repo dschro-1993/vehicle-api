@@ -1,5 +1,5 @@
 Parameters:
-  GitHubOrg:
+  GitHubORG:
     Type: String
   RepositoryName:
     Type: String
@@ -34,7 +34,7 @@ Resources:
               StringEquals:
                 token.actions.githubusercontent.com:aud: !Ref OIDCAudience
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${RepositoryName}:*
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubORG}/${RepositoryName}:*
 
   GithubOidc:
     Type:  AWS::IAM::OIDCProvider

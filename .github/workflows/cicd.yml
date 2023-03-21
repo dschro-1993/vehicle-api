@@ -48,6 +48,9 @@ jobs:
     defaults:
       run:
         working-directory: ./terraform/qa # Todo
+    permissions:
+      id-token: write
+      contents: write
     steps:
       - name: AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
