@@ -1,0 +1,166 @@
+openapi: 3.0.0
+info:
+  title:   Vehicle-API
+  version: 1.0.0
+paths:
+# /v1/findByQuery:
+#   get:
+#     summary: Find Vehicles by Query => <>
+#     parameters:
+#       - name: <>
+#         required: True
+#         description: <>
+#         schema:
+#           type: string
+#         in: query
+#       - ...
+#     x-amazon-apigateway-integration:
+#       uri: "${api_resolver}"
+#       httpMethod: "POST"
+#       type:  "aws_proxy"
+#     responses:
+#       "200":
+#         description: Successful Operation
+#         content:
+#           application/json:
+#             schema:
+#               type: array
+#               items:
+#                 $ref: "#/components/schemas/Vehicle"
+#       "400":
+#         description: BAD REQUEST
+  /v1/{id}:
+    get:
+      summary: Find Vehicle by ID
+      parameters:
+        - name: id
+          required: True
+          schema:
+            type: string
+          in: path
+      x-amazon-apigateway-integration:
+        uri: "${api_resolver}"
+        httpMethod: "POST"
+        type:  "aws_proxy"
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        "404":
+          description: NOT FOUND
+    put:
+      summary: Update Vehicle by ID
+      requestBody:
+        required: True
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleUpdateRequest"
+      parameters:
+        - name: id
+          required: True
+          schema:
+            type: string
+          in: path
+      x-amazon-apigateway-integration:
+        uri: "${api_resolver}"
+        httpMethod: "POST"
+        type:  "aws_proxy"
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        "400":
+          description: BAD REQUEST
+        "404":
+          description: NOT FOUND
+    delete:
+      summary: Delete Vehicle by ID
+      parameters:
+        - name: id
+          required: True
+          schema:
+            type: string
+          in: path
+      x-amazon-apigateway-integration:
+        uri: "${api_resolver}"
+        httpMethod: "POST"
+        type:  "aws_proxy"
+      responses:
+        "204":
+          description: Successful Operation
+  /v1:
+    post:
+      summary: Create Vehicle
+      requestBody:
+        required: True
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleCreateRequest"
+      x-amazon-apigateway-integration:
+        uri: "${api_resolver}"
+        httpMethod: "POST"
+        type:  "aws_proxy"
+      responses:
+        "201":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+        "400":
+          description: BAD REQUEST
+components:
+  schemas:
+    VehicleCreateRequest:
+      type: object
+      properties:
+        vin:
+          type: string
+        vendor:
+          type: string
+        torque:
+          type: string
+        power:
+          type: string
+    # required: []
+    VehicleUpdateRequest:
+      type: object
+      properties:
+        vin:
+          type: string
+        vendor:
+          type: string
+        torque:
+          type: string
+        power:
+          type: string
+    # required: []
+
+    Vehicle:
+      type: object
+      properties:
+        vin:
+          type: string
+        vendor:
+          type: string
+        torque:
+          type: string
+        power:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid

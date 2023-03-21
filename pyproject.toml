@@ -1,0 +1,50 @@
+[tool.pylint.messages_control]
+disable = [
+  "C0103",
+  "C0121",
+  "C0411",
+  "C0413",
+  "E0611",
+  "R0903",
+  "W0511",
+  "W0622",
+]
+
+[tool.pylint.format]
+indent-string="  "
+
+[tool.pytest.ini_options]
+pythonpath  = "vehicle_api"
+addopts     = "-ra -v" # -ra => full test summary
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.poetry]
+name        = "vehicle-api"
+version     = "0.1.0"
+description = "vehicle-api"
+authors     = ["Schroettinger, Dominik <dominik.schroettinger@devoteam.com>"]
+readme      = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+boto3 = "^1.26.90"
+
+# Uses Pydantic
+aws-lambda-powertools = "^2.10.0"
+
+python-dotenv = "^1.0.0"
+
+# Used for smoke-tests
+requests = "^2.28.0"
+
+pylint = "^2.17.0"
+
+pydantic-factories = "^1.17.0"
+freezegun          = "^1.2.0"
+coverage           = "^7.2.1"
+pytest             = "^7.2.1"
