@@ -14,7 +14,7 @@ jobs:
     container: ghcr.io/dschro-1993/vehicle-api:latest # Has Poetry pre-installed
     steps:
       - uses: actions/checkout@v3
-      - name: Installation
+      - name: Install all Dependencies
         run: |
           poetry install
       - name: Run unit-tests
@@ -29,13 +29,14 @@ jobs:
     runs-on: ubuntu-20.04
     needs: ci
     environment: qa # TBD
-    container: terraform:latest
     env:
       AWS_ACCESS_KEY_ID:     ${{secrets.AWS_ACCESS_KEY_ID}}
       AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
       AWS_DEFAULT_REGION:    eu-west-1
       AWS_DEFAULT_OUTPUT:    json
     steps:
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
       - name: terraform-init
         run:  terraform init
 #     - tf-validate
