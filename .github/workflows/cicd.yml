@@ -47,6 +47,11 @@ jobs:
           poetry run coverage run -m pytest tests/intr
           poetry run coverage report -m
 
+#     - Black + Pre-Commit?
+#     - ...
+#   ...
+# ...
+
   cd:
     runs-on: ubuntu-latest
     needs: ci

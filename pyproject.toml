@@ -33,6 +33,9 @@ readme      = "README.md"
 python = "^3.9"
 
 [tool.poetry.dev-dependencies]
+pre-commit = "^3.2.0"
+black = "^23.1.0"
+
 boto3 = "^1.26.90"
 
 # Uses Pydantic
