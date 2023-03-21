@@ -6,7 +6,6 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-20.04
-    environment: qa # TBD
     services:
       dynamodb:
         image: amazon/dynamodb-local
@@ -26,7 +25,19 @@ jobs:
         run: |
           poetry run coverage run -m pytest tests/intr
           poetry run coverage report -m
-#     - tf-init
+  cd:
+    runs-on: ubuntu-20.04
+    needs: ci
+    environment: qa # TBD
+    container: terraform:latest
+    env:
+      AWS_ACCESS_KEY_ID:     ${{secrets.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      AWS_DEFAULT_REGION:    eu-west-1
+      AWS_DEFAULT_OUTPUT:    json
+    steps:
+      - name: terraform-init
+        run:  terraform init
 #     - tf-validate
 #     - tf-diff
 #     - ...
