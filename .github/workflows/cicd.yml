@@ -75,6 +75,7 @@ jobs:
       - name: terraform-apply
         run:  terraform apply --auto-approve
 
+#       Job running daily?
 #     - smoke-tests
 #     - ...
 #   ...
