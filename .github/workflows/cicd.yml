@@ -11,20 +11,15 @@ jobs:
         image: amazon/dynamodb-local
         ports:
           - 8000:8000
-    env: # => To make BOTO3 happy
-      AWS_ACCESS_KEY_ID:     AWS_ACCESS_KEY_ID
-      AWS_SECRET_ACCESS_KEY: AWS_SECRET_ACCESS_KEY
-      AWS_DEFAULT_REGION:    eu-west-1
-      AWS_DEFAULT_OUTPUT:    json
     steps:
       - uses: actions/checkout@v3
+      - name: Install Poetry
+        run: |
+          pipx install poetry==1.4.0
       - uses: actions/setup-python@v4
         with:
           python-version: 3.9 # => Required by λ-Service
           cache: poetry
-      - name: Install Poetry
-        run: |
-          pipx install poetry==1.4.0
       - name: Install all (Dev-)Dependencies
         run: |
           poetry install
