@@ -30,11 +30,10 @@ authors     = ["Schroettinger, Dominik <dominik.schroettinger@devoteam.com>"]
 readme      = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "~3.9.16" # => Required by λ-Service
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.2.0"
-black = "^23.1.0"
 
 boto3 = "^1.26.90"
 

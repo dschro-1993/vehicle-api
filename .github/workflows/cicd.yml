@@ -37,17 +37,15 @@ jobs:
           poetry install
       - name: Run pylint
         run: |
-          poetry run pylint vehicle_api/
+          pylint vehicle_api/
       - name: Run unit-tests
         run: |
-          poetry run coverage run -m pytest tests/unit
-          poetry run coverage report -m
+          coverage run -m pytest tests/unit
+          coverage report -m
       - name: Run intr-tests
         run: |
-          poetry run coverage run -m pytest tests/intr
-          poetry run coverage report -m
-
-#     - Black + Pre-Commit?
+          coverage run -m pytest tests/intr
+          coverage report -m
 #     - ...
 #   ...
 # ...
