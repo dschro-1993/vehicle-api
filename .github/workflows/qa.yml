@@ -12,13 +12,13 @@ permissions:
 
 jobs:
   ci-qa:
-    uses: ./.github/workflows/ci.yml@main
+    uses: ./.github/workflows/ci.yml
     secrets: inherit
     with:
       # ${{github.event.inputs.environment}}
       environment: qa
   cd-qa:
-    uses: ./.github/workflows/cd.yml@main
+    uses: ./.github/workflows/cd.yml
     needs: ci-qa
     secrets: inherit
     with:
