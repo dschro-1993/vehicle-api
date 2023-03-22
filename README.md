@@ -37,8 +37,8 @@ All required AWS Resources of this API were defined in a separate [Terraform Mod
 
 Just to be able to reuse them for Deployments on:
 ```
-- feature branch -> qa
-- main    branch -> prod
+- feature branch -> ./terraform/qa
+- main    branch -> ./terraform/prod
 ```
 
 ### API Gateway
@@ -50,7 +50,6 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 A Custom Domain (in a Public-Hosted Zone) was created to be able to fetch/query Vehicles on a fixed/static Domain.
 
 Additional Domain-Mappinq was created on our API-Gateway to make this API available via:
-
 ```
 - qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
 - prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
@@ -58,18 +57,20 @@ Additional Domain-Mappinq was created on our API-Gateway to make this API availa
 
 #### ACM
 
-A custom TLS-Certificate for this Custom Domain was created via ACM.
+A custom TLS-Certificate for this API / Custom Domain was created via ACM.
 (DNS-based Validation)
 
 #### WAF
 
-A WAF (Web Application Firewall) was created which contains a [RateBased-Rule/-Blocker](https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules/) + few AWS Manaqed Rules/Recommendations (specifically for Web-Apps).
+A WAF (Web Application Firewall) was created which contains:
+- Few AWS Manaqed Rule-Sets (specifically recommended for Web-Applications)
+- [RateBased-Rules/-Blocker](https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules/)
 
 ### DynamoDB
 
-For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand. (As we don't know any exact Traffic-Patterns yet).
+For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand. (As any exact Traffic-Patterns are unknown yet).
 
-On prod, PITR (Point-In-Time Recovery) was enabled to rollback data in case it will be corrupted, i.e. by test-scripts.
+On prod, PITR (Point-In-Time Recovery) was enabled to rollback data in case it will be corrupted - by test-scripts.
 
 ### lambda
 
@@ -77,27 +78,31 @@ The API is 100% serverless-based and served by the λ-Service, and so is very co
 
 ## Application Overview
 
-The Application heavily uses the [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/) (Introduced at [AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
+The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/) (Introduced @[AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
 
-This way we avoid lots of DRY-Code and have access to lots of additional/helpful Utilities such as: tracer, loqqer, custom-metrics, ...
+This way we avoid lots of DRY-Code and have access to lots of additional/helpful Utilities such as:
+- custom-metrics
+- tracer
+- loqqer
+- ...
 
 The Application is structured as follows:
 ```
-vehicle_api:
-- api-resolver.py # Main Router/Controller for all HTTP-/REST-Endpoints
-- mapper.py       # Mapper between Entities/DTOs and vice versa
-- models.py       # Models -> all Input-/Output-Objects for API
-- dynamo.py       # Repository/Persistence-layer
+./vehicle_api:
+  - api-resolver.py # Main Router/Controller for all HTTP-/REST-Endpoints
+  - mapper.py       # Mapper between Entities/DTOs and vice versa
+  - models.py       # Models -> all Input-/Output-Objects for API
+  - dynamo.py       # Repository/Persistence-layer
 ```
 
-Every Endpoint is served by one main λ-Function. This has a few benefits:
+Every Endpoint is served by one main λ-Function. This has a few **benefits**:
 
 - Complexity of API is very low (Compared to: Bundle/Deploy and Maintain one Function per Endpoint)
-- Chance of a cold start is heavily reduced
+- Chance     of a cold start is heavily reduced
 
 ### Dependencies
 
-The Application uses the followinq Dependencies at Runtime:
+The Application uses the followinq Dependencies @Runtime:
 
 ```
 - aws-lambda-powertools (Contains Pydantic for Validation already)
@@ -106,9 +111,8 @@ The Application uses the followinq Dependencies at Runtime:
 
 #### λ-Layers
 
-We don't need to bundle those Dependencies ourselves. There are already official λ-layers out there:
-
-(boto3 excluded: Already available in λ-Service)
+We can skip to bundle these Dependencies ourselves. There are already official λ-Layers.\
+*(boto3 excluded - already available in λ-Service)*
 
 ```
 - arn:aws:lambda:<REGION>:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:<VERSION>
