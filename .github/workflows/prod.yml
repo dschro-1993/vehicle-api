@@ -12,13 +12,13 @@ permissions:
 
 jobs:
   ci-prod:
-    uses: .github/workflows/ci.yml
+    uses: .github/workflows/ci.yml@main
     secrets: inherit
     with:
       # ${{github.event.inputs.environment}}
       env: prod
   cd-prod:
-    uses: .github/workflows/cd.yml
+    uses: .github/workflows/cd.yml@main
     needs: ci-prod
     secrets: inherit
     with:
