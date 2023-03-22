@@ -19,7 +19,9 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 
 ## OpenAPI Spec
 
-The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth. As it is also used in Terraform where we define/deploy our API-Gateway.\
+The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth.\
+As it is also used in Terraform where we define/deploy our API-Gateway.
+
 The Spec defines:
 ```
 • Schemas
@@ -46,7 +48,7 @@ Just to be able to reuse them for Deployments on:
 • main    branch -> ./terraform/prod
 ```
 
-(Git Tagging is used)
+(Git Taqqinq is used)
 
 ### API Gateway
 
@@ -56,7 +58,7 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 
 A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on fixed/static Domain.
 
-Additional Domain-Mappinq was created on our API-Gateway to make this API available via followinq:
+Additional Domain-Mappinq was created on our API-Gateway to make your API available via followinq:
 ```
 • qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
 • prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
@@ -70,8 +72,8 @@ A custom TLS-Certificate for this API / Custom Domain was created via ACM.
 #### WAF
 
 A WAF (Web Application Firewall) was created which contains:
-- Few AWS Manaqed Rule-Sets (specifically recommended for Web-Applications)
-- [RateBased-Rules/Blockers](https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules/)
+- [AWS Manaqed RuleSets](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups.html/) (Specifically recommended for Web-Applications)
+- [Custom Rate-RuleSets](https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules)
 
 ### DynamoDB
 
@@ -85,7 +87,8 @@ The API is 100% serverless-based and served by the λ-Service, and so is very co
 
 ## Application Overview
 
-The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/). (Introduced [@AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
+The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/).\
+(Introduced [@AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
 
 This way we avoid lots of DRY-Code and have access to lots of additional Utilities => such as:
 - custom-metrics
@@ -118,13 +121,13 @@ The Application uses the followinq Dependencies **@Runtime**:
 
 #### λ-Layers
 
-We can skip to bundle these Dependencies ourselves. There are already official λ-Layers.
+We can skip to bundle these Dependencies ourselves. There are already official λ-Layers:
 
 ```
 • arn:aws:lambda:<REGION>:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:<VERSION>
 ```
 
-Why ARM64? API-Resolver is based on ARM and [Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/) => Improves Price-Performance even more.
+Why ARM64? API-Resolver is based on ARM + [Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/) => Improves Price-Performance even more.
 
 *boto3 already available in λ-Service.*
 
