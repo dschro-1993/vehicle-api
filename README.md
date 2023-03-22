@@ -19,13 +19,20 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 
 ## OpenAPI Spec
 
-An always up-to-date Version of this API can be found [here](./openapi.yml).
+The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth. As it is also used in Terraform where we define/deploy our API-Gateway.\
+The Spec defines:
+```
+• Schemas
+  • UpdateVehicleRequest # DTO
+  • CreateVehicleRequest # DTO
+  • Vehicle
 
-This is your Source of Truth of this API as it is also used within Terraform where we define/deploy our API-Gateway.
-It defines all our:
-- Endpoints (Create, Update, Delete, Find-By-ID, ...)
-  - With a Version-Prefix: v1 (for now)
-- In- and Outputs
+• Endpoints
+  • Delete-By-ID
+  • Update-By-ID
+  • Find-By-ID
+  • Create
+````
 
 ## Infra
 
@@ -47,7 +54,7 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 
 #### R53
 
-A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on a fixed/static Domain.
+A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on fixed/static Domain.
 
 Additional Domain-Mappinq was created on our API-Gateway to make this API available via followinq:
 ```
@@ -143,12 +150,9 @@ On Poetry -> poetry run pytest tests/unit
 
 ### Intr
 
-Prerequisite:
 ```
 docker run -d -p 8000:8000 amazon/dynamodb-local
-```
 
-```
 On Poetry -> poetry run pytest tests/intr
 ```
 
