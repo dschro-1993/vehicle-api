@@ -23,20 +23,6 @@ The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth.
 
 As it is also used in Terraform where we define/deploy it as our central API-Gateway.
 
-The Spec defines i.e.
-```
-• Endpoints
-  • Update-By-ID # => Update Vehicle by UUID
-  • Delete-By-ID # => Delete Vehicle by UUID
-  • Find-By-ID   # => Find   Vehicle by UUID
-  • Create       # => Create Vehicle
-
-• Schemas
-  • UpdateVehicleRequest # DTO
-  • CreateVehicleRequest # DTO
-  • Vehicle
-````
-
 ## Infra
 
 ### Terraform
