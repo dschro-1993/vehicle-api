@@ -28,8 +28,7 @@ pylint vehicle_api/
 ### Unit
 
 ```
-coverage run -m pytest tests/unit
-coverage report -m
+poetry run pytest tests/unit
 ```
 
 ### Intr
@@ -40,13 +39,12 @@ docker run -d -p 8000:8000 amazon/dynamodb-local
 ```
 
 ```
-coverage run -m pytest tests/intr
-coverage report -m
+poetry run pytest tests/intr
 ```
 
 ## Deployment
 
-...
+Have a look at the Workflow.
 
 ## Smoke-Test
 
