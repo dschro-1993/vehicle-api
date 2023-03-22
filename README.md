@@ -66,7 +66,7 @@ A WAF (Web Application Firewall) was created which contains:
 
 For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact Traffic-Patterns are unknown yet.
 
-On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => via test-scripts.
+On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted: i.e. via test-scripts.
 
 ### lambda
 
