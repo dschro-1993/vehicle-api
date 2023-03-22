@@ -46,12 +46,12 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 
 #### R53
 
-A Custom Domain (in a Public-Hosted Zone) was created to be able to fetch/query Vehicles on a fixed/static Domain.
+A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on a fixed/static Domain.
 
 Additional Domain-Mappinq was created on our API-Gateway to make this API available via:
 ```
-- qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
-- prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
+• qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
+• prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
 ```
 
 #### ACM
@@ -69,7 +69,7 @@ A WAF (Web Application Firewall) was created which contains:
 
 For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact Traffic-Patterns are unknown yet.
 
-On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback data in case it will be corrupted => i.e. via test-scripts.
+On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => i.e. via test-scripts.
 
 ### lambda
 
@@ -88,15 +88,15 @@ This way we avoid lots of DRY-Code and have access to lots of additional Utiliti
 The Application is structured as follows:
 ```
 ./vehicle_api:
-  - api-resolver.py # Main Router/Controller for all HTTP-/REST-Endpoints
-  - mapper.py       # Mapper between Entities/DTOs and vice versa
-  - models.py       # Models -> all Input-/Output-Objects for API
-  - dynamo.py       # Repository/Persistence-layer
+  • api-resolver.py # Main Router/Controller for all HTTP-/REST-Endpoints
+  • mapper.py       # Mapper between Entities/DTOs and vice versa
+  • models.py       # Models -> all Input-/Output-Objects for API
+  • dynamo.py       # Repository/Persistence-layer
 ```
 
-Every Endpoint is served by one main λ-Function. This has a few **benefits**:
+Every Endpoint is served by 1 main λ-Function. This has a few **benefits**:
 
-- Complexity of API is very low (Compared to: Bundle/Deploy and Maintain one Function per Endpoint)
+- Complexity of API is very low (Compared to: Bundle/Deploy + Maintain 1 Function per Endpoint)
 - Chance     of a cold start is heavily reduced
 
 ### Dependencies
@@ -104,8 +104,8 @@ Every Endpoint is served by one main λ-Function. This has a few **benefits**:
 The Application uses the followinq Dependencies **@Runtime**:
 
 ```
-- aws-lambda-powertools (Contains Pydantic for Validation already)
-- boto3
+• aws-lambda-powertools (Contains Pydantic for Validation already)
+• boto3
 ```
 
 #### λ-Layers
@@ -113,10 +113,12 @@ The Application uses the followinq Dependencies **@Runtime**:
 We can skip to bundle these Dependencies ourselves => There are already official λ-Layers.
 
 ```
-- arn:aws:lambda:<REGION>:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:<VERSION>
+• arn:aws:lambda:<REGION>:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:<VERSION>
 ```
 
-(boto3 already available in λ-Service)
+Why ARM-64? Api-Resolver / λ is based on ARM and [Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/) => Improves Price-Performance even more.
+
+boto3 already available in λ-Service.
 
 ## Installation
 
