@@ -49,7 +49,7 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 
 A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on a fixed/static Domain.
 
-Additional Domain-Mappinq was created on our API-Gateway to make this API available via:
+Additional Domain-Mappinq was created on our API-Gateway to make this API available via followinq:
 ```
 • qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
 • prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
@@ -80,7 +80,7 @@ The API is 100% serverless-based and served by the λ-Service, and so is very co
 
 The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/). (Introduced [@AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
 
-This way we avoid lots of DRY-Code and have access to lots of additional Utilities -> such as:
+This way we avoid lots of DRY-Code and have access to lots of additional Utilities => such as:
 - custom-metrics
 - loqqer
 - tracer
@@ -119,7 +119,7 @@ We can skip to bundle these Dependencies ourselves. There are already official �
 
 Why ARM64? API-Resolver is based on ARM and [Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/) => Improves Price-Performance even more.
 
-boto3 already available in λ-Service.
+*boto3 already available in λ-Service.*
 
 ## Installation
 
