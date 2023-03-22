@@ -23,9 +23,8 @@ jobs:
       - name: Check-Out
         uses: actions/checkout@v3
 
-      - name: Install Poetry
-        run:
-          - pipx install poetry==1.4.0
+      - run:  pipx install poetry==1.4.0
+        name: Install Poetry
       - name: Install Python
         uses: actions/setup-python@v4
         with:
