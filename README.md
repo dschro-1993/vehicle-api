@@ -20,7 +20,7 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 ## OpenAPI Spec
 
 The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth.\
-As it is also used in Terraform where we define/deploy our API-Gateway.
+As it is also used in Terraform where we define/deploy it as API-Gateway.
 
 The Spec defines:
 ```
@@ -30,10 +30,10 @@ The Spec defines:
   • Vehicle
 
 • Endpoints
-  • Delete-By-ID
-  • Update-By-ID
-  • Find-By-ID
-  • Create
+  • Update-By-ID # => Update Vehicle by UUID via optional Inputs
+  • Delete-By-ID # => Delete Vehicle by UUID
+  • Find-By-ID   # => Find   Vehicle by UUID
+  • Create       # => Create Vehicle via required Inputs
 ````
 
 ## Infra
