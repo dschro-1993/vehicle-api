@@ -31,14 +31,15 @@ It defines all our:
 
 ### Terraform
 
-All required AWS Resources of this API were defined in a separate [Terraform Module](https://github.com/dschro-1993/vehicle-api-terraform-module).\
-(Git Tagging is used)
+All required AWS Resources of this API were defined in a separate [Terraform Module](https://github.com/dschro-1993/vehicle-api-terraform-module).
 
 Just to be able to reuse them for Deployments on:
 ```
 • feature branch -> ./terraform/qa
 • main    branch -> ./terraform/prod
 ```
+
+(Git Tagging is used)
 
 ### API Gateway
 
@@ -69,7 +70,7 @@ A WAF (Web Application Firewall) was created which contains:
 
 For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact Traffic-Patterns are unknown yet.
 
-On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => i.e. via test-scripts.
+On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => i.e. via tst-scripts.
 
 ### lambda
 
@@ -77,9 +78,9 @@ The API is 100% serverless-based and served by the λ-Service, and so is very co
 
 ## Application Overview
 
-The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/) (Introduced [@AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
+The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/). (Introduced [@AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
 
-This way we avoid lots of DRY-Code and have access to lots of additional Utilities such as:
+This way we avoid lots of DRY-Code and have access to lots of additional Utilities -> such as:
 - custom-metrics
 - loqqer
 - tracer
@@ -110,13 +111,13 @@ The Application uses the followinq Dependencies **@Runtime**:
 
 #### λ-Layers
 
-We can skip to bundle these Dependencies ourselves => There are already official λ-Layers.
+We can skip to bundle these Dependencies ourselves. There are already official λ-Layers.
 
 ```
 • arn:aws:lambda:<REGION>:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:<VERSION>
 ```
 
-Why ARM-64? Api-Resolver / λ is based on ARM and [Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/) => Improves Price-Performance even more.
+Why ARM64? API-Resolver is based on ARM and [Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/) => Improves Price-Performance even more.
 
 boto3 already available in λ-Service.
 
