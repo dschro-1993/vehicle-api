@@ -22,7 +22,7 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth.\
 As it is also used in Terraform where we define/deploy it as API-Gateway.
 
-The Spec defines i.e.:
+The Spec defines i.e.
 ```
 • Schemas
   • UpdateVehicleRequest # DTO
@@ -137,12 +137,6 @@ Why ARM64? API-Resolver is based on ARM + [Graviton2](https://aws.amazon.com/blo
 poetry install
 ```
 
-## Pylint
-
-```
-On Poetry -> pylint vehicle_api/
-```
-
 ## Pytest
 
 ### Unit
@@ -157,6 +151,12 @@ On Poetry -> poetry run pytest tests/unit
 docker run -d -p 8000:8000 amazon/dynamodb-local
 
 On Poetry -> poetry run pytest tests/intr
+```
+
+## Pylint
+
+```
+On Poetry -> pylint vehicle_api/
 ```
 
 ## Deployment
