@@ -34,7 +34,7 @@ jobs:
           cache: poetry
       - name: Install all (Dev-)Dependencies
         run: |
-          poetry install
+          poetry install && poetry shell
       - name: Run pylint
         run: |
           pylint vehicle_api/
