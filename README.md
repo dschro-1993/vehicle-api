@@ -20,20 +20,20 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 ## OpenAPI Spec
 
 The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth.\
-As it is also used in Terraform where we define/deploy it as API-Gateway.
+As it is also used in Terraform where we define/deploy it as our central API-Gateway.
 
 The Spec defines i.e.
 ```
+• Endpoints
+  • Update-By-ID # => Update Vehicle by UUID
+  • Delete-By-ID # => Delete Vehicle by UUID
+  • Find-By-ID   # => Find   Vehicle by UUID
+  • Create       # => Create Vehicle
+
 • Schemas
   • UpdateVehicleRequest # DTO
   • CreateVehicleRequest # DTO
   • Vehicle
-
-• Endpoints
-  • Update-By-ID # => Update Vehicle by UUID via optional Inputs
-  • Delete-By-ID # => Delete Vehicle by UUID
-  • Find-By-ID   # => Find   Vehicle by UUID
-  • Create       # => Create Vehicle via required Inputs
 ````
 
 ## Infra
@@ -83,7 +83,7 @@ On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data 
 
 ### lambda
 
-The API is 100% serverless-based and served by the λ-Service, and so is very cost-effective.
+The API is 100% serverless-based and served by the λ-Service and hence is very cost-effective.
 
 ## Application Overview
 
@@ -107,15 +107,15 @@ The Application is structured as follows:
 
 Every Endpoint is served by 1 main λ-Function. This has a few **benefits**:
 
-- Complexity of API is very low (Compared to: Bundle/Deploy + Maintain 1 Function per Endpoint)
+- Complexity of API is very low (Compared To Bundle/Deploy + Maintain 1 Function per Endpoint)
 - Chance     of a cold start is heavily reduced
 
 ### Dependencies
 
-The Application uses the followinq Dependencies **@Runtime**:
+The Application uses the followinq Dependencies @Runtime:
 
 ```
-• aws-lambda-powertools (Contains Pydantic for Validation already)
+• aws-lambda-powertools (Provide Pydantic for Validation)
 • boto3
 ```
 
