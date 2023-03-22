@@ -34,18 +34,19 @@ jobs:
           cache: poetry
       - name: Install all (Dev-)Dependencies
         run: |
-          poetry install && poetry shell
+          poetry install
       - name: Run pylint
         run: |
-          pylint vehicle_api/
+          poetry run pylint vehicle_api/
       - name: Run unit-tests
         run: |
-          coverage run -m pytest tests/unit
-          coverage report -m
+          poetry run coverage run -m pytest tests/unit
+          poetry run coverage report -m
       - name: Run intr-tests
         run: |
-          coverage run -m pytest tests/intr
-          coverage report -m
+          poetry run coverage run -m pytest tests/intr
+          poetry run coverage report -m
+
 #     - ...
 #   ...
 # ...
