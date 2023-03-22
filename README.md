@@ -67,9 +67,9 @@ A WAF (Web Application Firewall) was created which contains:
 
 ### DynamoDB
 
-For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand. (As any exact Traffic-Patterns are unknown yet).
+For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact Traffic-Patterns are unknown yet.
 
-On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback data in case it will be corrupted -> i.e. via test-scripts.
+On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback data in case it will be corrupted => i.e. via test-scripts.
 
 ### lambda
 
@@ -110,12 +110,13 @@ The Application uses the followinq Dependencies **@Runtime**:
 
 #### λ-Layers
 
-We can skip to bundle these Dependencies ourselves -> There are already official λ-Layers.\
-*(boto3 already available in λ-Service)*
+We can skip to bundle these Dependencies ourselves => There are already official λ-Layers.
 
 ```
 - arn:aws:lambda:<REGION>:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:<VERSION>
 ```
+
+(boto3 already available in λ-Service)
 
 ## Installation
 
