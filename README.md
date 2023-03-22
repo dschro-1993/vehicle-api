@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This Repository serves as a REST-driven Serverless-Blueprint on AWS.
+This Repository just serves as a REST-driven Serverless-Blueprint on AWS.
+
+(AppSync-Wrapper for GraphQL-Support is planned/WIP)
 
 ## Architecture
 
