@@ -16,11 +16,11 @@ jobs:
     secrets: inherit
     with:
       # ${{github.event.inputs.environment}}
-      env: qa
+      environment: qa
   cd-qa:
     uses: ./.github/workflows/cd.yml
     needs: ci-qa
     secrets: inherit
     with:
       # ${{github.event.inputs.environment}}
-      env: qa
+      environment: qa

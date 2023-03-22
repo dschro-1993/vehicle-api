@@ -4,8 +4,7 @@ on:
   workflow_call:
     inputs:
       environment:
-        required: !false
-        type:     string
+        type: string
 
 jobs:
   cd:

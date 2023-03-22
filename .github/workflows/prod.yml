@@ -16,11 +16,11 @@ jobs:
     secrets: inherit
     with:
       # ${{github.event.inputs.environment}}
-      env: prod
+      environment: prod
   cd-prod:
     uses: ./.github/workflows/cd.yml
     needs: ci-prod
     secrets: inherit
     with:
       # ${{github.event.inputs.environment}}
-      env: prod
+      environment: prod
