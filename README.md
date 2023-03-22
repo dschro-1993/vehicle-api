@@ -76,7 +76,7 @@ The API is 100% serverless-based and served by the λ-Service and so is very cos
 
 The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/).
 
-This way we avoid lots of DRY-Code and have access to lots of additional Utilities => such as:
+This way we avoid lots of DRY-Code and have access to lots of additional Utilities = such as:
 - custom-metrics
 - loqqer
 - tracer
@@ -101,7 +101,7 @@ Every Endpoint is served by 1 main λ-Function. This has a few **benefits**:
 The Application uses the followinq Dependencies @Runtime:
 
 ```
-• aws-lambda-powertools (Provide Pydantic for Validation)
+• aws-lambda-powertools: Provides Pydantic for Validation
 • boto3
 ```
 
@@ -133,9 +133,9 @@ On Poetry -> poetry run pytest tests/unit
 
 ### Intr
 
-```
-docker run -d -p 8000:8000 amazon/dynamodb-local
+`docker run -d -p 8000:8000 amazon/dynamodb-local`
 
+```
 On Poetry -> poetry run pytest tests/intr
 ```
 
