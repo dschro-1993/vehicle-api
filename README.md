@@ -45,7 +45,7 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 
 A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on fixed/static Domain.
 
-Additional Domain-Mappinq was created on our API-Gateway - to make your API available via followinq:
+Additional Domain-Mappinq was created on our API-Gateway - To make your API available via followinq:
 ```
 • qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
 • prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
@@ -66,11 +66,11 @@ A WAF (Web Application Firewall) was created which contains:
 
 For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact Traffic-Patterns are unknown yet.
 
-On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => i.e. via tst-scripts.
+On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => via test-scripts.
 
 ### lambda
 
-The API is 100% serverless-based and served by the λ-Service and hence is very cost-effective.
+The API is 100% serverless-based and served by the λ-Service and so is very cost-effective.
 
 ## Application Overview
 
