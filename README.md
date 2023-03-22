@@ -4,7 +4,7 @@
 
 This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 
-(AppSync-Wrapper for GraphQL-Support is planned/WIP)
+(AppSync-Wrapper for a GraphQL-Support is planned / WIP)
 
 ## Architecture
 
@@ -88,8 +88,7 @@ The API is 100% serverless-based and served by the λ-Service and hence is very 
 
 ## Application Overview
 
-The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/).\
-(Introduced [@AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
+The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/).
 
 This way we avoid lots of DRY-Code and have access to lots of additional Utilities => such as:
 - custom-metrics
@@ -152,12 +151,6 @@ On Poetry -> poetry run pytest tests/unit
 docker run -d -p 8000:8000 amazon/dynamodb-local
 
 On Poetry -> poetry run pytest tests/intr
-```
-
-## Pylint
-
-```
-On Poetry -> pylint vehicle_api/
 ```
 
 ## Deployment

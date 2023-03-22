@@ -16,10 +16,10 @@ jobs:
         ports:
           - 8000:8000
     steps:
-      # - name: Harden Runner
-      #   uses: step-security/harden-runner@v2
-      #   with:
-      #     egress-policy: block
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
       - name: Check-Out
         uses: actions/checkout@v3
 

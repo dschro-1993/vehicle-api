@@ -14,10 +14,10 @@ jobs:
       run:
         working-directory: ./terraform/${{inputs.environment}}
     steps:
-      # - name: Harden Runner
-      #   uses: step-security/harden-runner@v2
-      #   with:
-      #     egress-policy: block
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
       - name: Check-Out
         uses: actions/checkout@v3
 
