@@ -32,20 +32,17 @@ jobs:
           python-version: 3.9 # => Required by λ-Service
           cache: poetry
 
-      - name: Install (Dev-)Dependencies
-        run:
-          - poetry install
+      - run:  poetry install
+        name: Install Dependencies
 
-      - name: Unit-Tests
-        run:
-          - poetry run pytest tests/unit
-      - name: Intr-Tests
-        run:
-          - poetry run pytest tests/intr
+      - run:  poetry run pytest tests/unit
+        name: Unit-Tests
 
-#     - name: Run pylint
-#       run:
-#         - poetry run pylint ./*
+      - run:  poetry run pytest tests/intr
+        name: Intr-Tests
+
+#     - run:  poetry run pylint ./*
+#       name: Pylint
 #     - ...
 #   ...
 # ...
