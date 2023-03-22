@@ -1,0 +1,52 @@
+name: CI-Flow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: !false
+        type:     string
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    environment: ${{inputs.environment}}
+    services:
+      dynamodb:
+        image: amazon/dynamodb-local
+        ports:
+          - 8000:8000
+    steps:
+      # - name: Harden Runner
+      #   uses: step-security/harden-runner@v2
+      #   with:
+      #     egress-policy: block
+      - name: Check-Out
+        uses: actions/checkout@v3
+
+      - name: Install Poetry
+        run:
+          - pipx install poetry==1.4.0
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9 # => Required by λ-Service
+          cache: poetry
+
+      - name: Install (Dev-)Dependencies
+        run:
+          - poetry install
+
+      - name: Unit-Tests
+        run:
+          - poetry run pytest tests/unit
+      - name: Intr-Tests
+        run:
+          - poetry run pytest tests/intr
+
+#     - name: Run pylint
+#       run:
+#         - poetry run pylint ./*
+#     - ...
+#   ...
+# ...

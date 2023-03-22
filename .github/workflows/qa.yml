@@ -1,0 +1,26 @@
+name: cicd-qa
+
+on:
+  # workflow_dispatch: <>
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  ci-qa:
+    uses: .github/workflows/ci.yml
+    secrets: inherit
+    with:
+      # ${{github.event.inputs.environment}}
+      env: qa
+  cd-qa:
+    uses: .github/workflows/cd.yml
+    needs: ci-qa
+    secrets: inherit
+    with:
+      # ${{github.event.inputs.environment}}
+      env: qa

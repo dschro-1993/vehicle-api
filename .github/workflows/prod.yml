@@ -1,0 +1,26 @@
+name: cicd-prod
+
+on:
+  # workflow_dispatch: <>
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  ci-prod:
+    uses: .github/workflows/ci.yml
+    secrets: inherit
+    with:
+      # ${{github.event.inputs.environment}}
+      env: prod
+  cd-prod:
+    uses: .github/workflows/cd.yml
+    needs: ci-prod
+    secrets: inherit
+    with:
+      # ${{github.event.inputs.environment}}
+      env: prod
