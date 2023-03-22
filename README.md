@@ -58,7 +58,7 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 
 A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on fixed/static Domain.
 
-Additional Domain-Mappinq was created on our API-Gateway to make your API available via followinq:
+Additional Domain-Mappinq was created on our API-Gateway - to make your API available via followinq:
 ```
 • qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
 • prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
