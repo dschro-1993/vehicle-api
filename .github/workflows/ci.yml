@@ -1,4 +1,4 @@
-name: CI-Flow
+name: ci-template
 
 on:
   workflow_call:
