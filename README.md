@@ -19,7 +19,8 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 
 ## OpenAPI Spec
 
-The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth.\
+The [OpenAPI-Spec](./openapi.yml) is our sinqle Source of Truth.
+
 As it is also used in Terraform where we define/deploy it as our central API-Gateway.
 
 The Spec defines i.e.
