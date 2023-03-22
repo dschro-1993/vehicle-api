@@ -13,8 +13,8 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 
 ## Prerequisites
 
-- Terraform
-- Python3.9
+- Terraform (Recommendation: tfenv)
+- Python3.9 (Recommendation: pyenv)
 - Poetry
 
 ## OpenAPI Spec
