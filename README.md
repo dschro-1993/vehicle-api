@@ -31,14 +31,13 @@ It defines all our:
 
 ### Terraform
 
-All required AWS Resources of this API were defined in a separate [Terraform Module](https://github.com/dschro-1993/vehicle-api-terraform-module).
-
+All required AWS Resources of this API were defined in a separate [Terraform Module](https://github.com/dschro-1993/vehicle-api-terraform-module).\
 (Git Tagging is used)
 
 Just to be able to reuse them for Deployments on:
 ```
-- feature branch -> ./terraform/qa
-- main    branch -> ./terraform/prod
+• feature branch -> ./terraform/qa
+• main    branch -> ./terraform/prod
 ```
 
 ### API Gateway
@@ -64,13 +63,13 @@ A custom TLS-Certificate for this API / Custom Domain was created via ACM.
 
 A WAF (Web Application Firewall) was created which contains:
 - Few AWS Manaqed Rule-Sets (specifically recommended for Web-Applications)
-- [RateBased-Rules/-Blocker](https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules/)
+- [RateBased-Rules/Blockers](https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules/)
 
 ### DynamoDB
 
 For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand. (As any exact Traffic-Patterns are unknown yet).
 
-On prod, PITR (Point-In-Time Recovery) was enabled to rollback data in case it will be corrupted - by test-scripts.
+On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback data in case it will be corrupted -> i.e. via test-scripts.
 
 ### lambda
 
@@ -78,12 +77,12 @@ The API is 100% serverless-based and served by the λ-Service, and so is very co
 
 ## Application Overview
 
-The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/) (Introduced @[AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
+The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/) (Introduced [@AWS re:Invent 2022](https://portal.awsevents.com/events/reInvent2022/sessions/opn306)).
 
-This way we avoid lots of DRY-Code and have access to lots of additional/helpful Utilities such as:
+This way we avoid lots of DRY-Code and have access to lots of additional Utilities such as:
 - custom-metrics
-- tracer
 - loqqer
+- tracer
 - ...
 
 The Application is structured as follows:
@@ -102,7 +101,7 @@ Every Endpoint is served by one main λ-Function. This has a few **benefits**:
 
 ### Dependencies
 
-The Application uses the followinq Dependencies @Runtime:
+The Application uses the followinq Dependencies **@Runtime**:
 
 ```
 - aws-lambda-powertools (Contains Pydantic for Validation already)
@@ -111,8 +110,8 @@ The Application uses the followinq Dependencies @Runtime:
 
 #### λ-Layers
 
-We can skip to bundle these Dependencies ourselves. There are already official λ-Layers.\
-*(boto3 excluded - already available in λ-Service)*
+We can skip to bundle these Dependencies ourselves -> There are already official λ-Layers.\
+*(boto3 already available in λ-Service)*
 
 ```
 - arn:aws:lambda:<REGION>:017000801446:layer:AWSLambdaPowertoolsPythonV2-Arm64:<VERSION>
