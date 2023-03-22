@@ -127,17 +127,13 @@ poetry install
 
 ### Unit
 
-```
-On Poetry -> poetry run pytest tests/unit
-```
+`poetry run pytest tests/unit`
 
 ### Intr
 
 `docker run -d -p 8000:8000 amazon/dynamodb-local`
 
-```
-On Poetry -> poetry run pytest tests/intr
-```
+`poetry run pytest tests/intr`
 
 ## Deployment
 
