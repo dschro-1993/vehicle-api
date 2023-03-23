@@ -61,25 +61,21 @@ A WAF (Web Application Firewall) was created which contains:
 - [AWS Manaqed RuleSets](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups.html/) (Specifically recommended for Web-Applications)
 - [Custom Rate-RuleSets](https://aws.amazon.com/blogs/security/three-most-important-aws-waf-rate-based-rules)
 
-### DynamoDB
+### Dynamo
 
 For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact Traffic-Patterns are unknown yet.
 
 On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => i.e. via test-scripts.
 
-### lambda
+### λ
 
-The API is 100% serverless-based and served by the λ-Service and so is very cost-effective.
+The API is 100% serverless-based and served by the λ-Service - and so is very cost-effective.
 
-## Application
+## App
 
 The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/).
 
-This way we avoid lots of DRY-Code and have access to lots of additional Utilities = such as:
-- custom-metrics
-- loqqer
-- tracer
-- ...
+This way we avoid lots of DRY-Code and have access to lots of utilities like: Tracer, Loqqer
 
 Structure is as follows:
 ```
@@ -126,13 +122,17 @@ poetry install
 
 ### Unit
 
-`poetry run pytest tests/unit`
+```
+poetry run pytest tests/unit
+```
 
 ### Intr
 
-`docker run -d -p 8000:8000 amazon/dynamodb-local`
+Prerequisite => `docker run -d -p 8000:8000 amazon/dynamodb-local`
 
-`poetry run pytest tests/intr`
+```
+poetry run pytest tests/intr
+```
 
 ## Deployment
 
