@@ -67,7 +67,7 @@ For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact 
 
 On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => i.e. via test-scripts.
 
-### λ
+### Lambda
 
 The API is 100% serverless-based and served by the λ-Service - and so is very cost-effective.
 
@@ -75,7 +75,7 @@ The API is 100% serverless-based and served by the λ-Service - and so is very c
 
 The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/).
 
-This way we avoid lots of DRY-Code and have access to lots of utilities like: Tracer, Loqqer
+This way we avoid lots of DRY-Code and have access to lots of Utilities such as: Tracer, Loqqer, etc.
 
 Structure is as follows:
 ```
