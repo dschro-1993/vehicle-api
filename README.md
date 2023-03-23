@@ -9,7 +9,7 @@ This Repository just serves as a HTTP-/REST-driven Serverless-Blueprint on AWS.
 ## Architecture
 
 <!-- ![.](./docs/overview.jpg) -->
-<img src="./docs/overview.jpg" width="750" height="650">
+<img src="./docs/overview.jpg" width="800" height="650">
 
 ## Prerequisites
 
@@ -27,15 +27,14 @@ As it is also used in Terraform where we define/deploy it as our central API-Gat
 
 ### Terraform
 
-All required AWS Resources of this API were defined in a separate [Terraform Module](https://github.com/dschro-1993/vehicle-api-terraform-module).
+All required AWS Resources of the API were defined in a separate [Terraform Module](https://github.com/dschro-1993/vehicle-api-terraform-module).
 
-Just to be able to reuse them for Deployments on:
+Just to be able to reuse them for Multi-Env/-ORG Deployments, i.e.\
+(Git Taqqinq is used)
 ```
 • feature branch -> ./terraform/qa
 • main    branch -> ./terraform/prod
 ```
-
-(Git Taqqinq is used)
 
 ### API Gateway
 
@@ -43,9 +42,9 @@ The API Gateway itself is defined/deployed based on our OpenAPI-Spec.
 
 #### R53
 
-A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on fixed/static Domain.
+A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on Fixed/Static Domain.
 
-Additional Domain-Mappinq was created on our API-Gateway - To make your API available via followinq:
+Additional Domain-Mappinq was created on our API-Gateway -> To make the API available via followinq:
 ```
 • qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
 • prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
@@ -82,7 +81,7 @@ This way we avoid lots of DRY-Code and have access to lots of additional Utiliti
 - tracer
 - ...
 
-The Application is structured as follows:
+Structure is as follows:
 ```
 ./vehicle_api:
   • api-resolver.py # Main Router/Controller for all HTTP-/REST-Endpoints
