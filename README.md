@@ -71,7 +71,7 @@ On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data 
 
 The API is 100% serverless-based and served by the λ-Service and so is very cost-effective.
 
-## Application Overview
+## Application
 
 The Application heavily uses [AWS lambda PowerTools for Python](https://awslabs.github.io/aws-lambda-powertools-python/2.10.0/).
 
