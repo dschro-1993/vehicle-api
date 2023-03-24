@@ -20,6 +20,6 @@ jobs:
     with:
       working-directory: terraform/prod
       environment:       prod
-      trigger:           ${{github.event_name}}
+      github:            ${{github}}
     secrets: inherit
     needs:   ci-prod
