@@ -2,25 +2,24 @@ name: cicd-prod
 
 on:
   # workflow_dispatch: <>
+  pull_request:
   push:
     branches:
       - main
 
 permissions:
-  id-token: write
-  contents: write
+  pull-requests: write
+  id-token:      write
+  contents:      write
+
+environment: prod
 
 jobs:
   ci-prod:
-    uses: ./.github/workflows/ci.yml
-    secrets: inherit
-    with:
-      # ${{github.event.inputs.environment}}
-      environment: prod
+    uses: dschro-1993/vehicle-api/.github/workflows/ci.yml@0.1.0
   cd-prod:
-    uses: ./.github/workflows/cd.yml
-    needs: ci-prod
-    secrets: inherit
+    uses: dschro-1993/vehicle-api/.github/workflows/cd.yml@0.1.0
     with:
-      # ${{github.event.inputs.environment}}
-      environment: prod
+      working-directory: .terraform/prod
+    secrets: inherit
+    needs:   ci-prod
