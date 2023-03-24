@@ -16,8 +16,8 @@ jobs:
   cd-qa:
     uses: dschro-1993/vehicle-api-workflows/.github/workflows/cd.yml@0.1.0
     with:
-      dir:    terraform/qa
-      env:    qa
-      github: ${{github}}
+      dir:        terraform/qa
+      env:        qa
+      event-name: ${{github.event_name}}
     secrets: inherit
     needs:   ci-qa
