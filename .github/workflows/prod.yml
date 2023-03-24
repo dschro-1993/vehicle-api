@@ -12,12 +12,11 @@ permissions:
   id-token:      write
   contents:      write
 
-environment: prod
-
 jobs:
   ci-prod:
     uses: dschro-1993/vehicle-api-workflows/.github/workflows/ci.yml@0.1.0
   cd-prod:
+    environment: prod
     uses: dschro-1993/vehicle-api-workflows/.github/workflows/cd.yml@0.1.0
     with:
       working-directory: .terraform/prod
