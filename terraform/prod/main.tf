@@ -5,6 +5,6 @@ module "vehicle_api" {
   code_path         = "${path.module}/../../vehicle_api"
   openapi_spec_path = "${path.module}/../../openapi.yml"
   app_handler       = "api_resolver.lambda_handler"
-  app_version       = "latest" # Todo: var.app_version
+  app_version       = "v1" # Todo: var.app_version
   env               = "prod"
 }
