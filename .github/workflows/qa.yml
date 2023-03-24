@@ -16,9 +16,9 @@ jobs:
   ci-qa:
     uses: dschro-1993/vehicle-api-workflows/.github/workflows/ci.yml@0.1.0
   cd-qa:
-    environment: qa
     uses: dschro-1993/vehicle-api-workflows/.github/workflows/cd.yml@0.1.0
     with:
       working-directory: .terraform/qa
+      environment:       qa
     secrets: inherit
     needs:   ci-qa
