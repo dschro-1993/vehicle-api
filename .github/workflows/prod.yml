@@ -18,8 +18,8 @@ jobs:
   cd-prod:
     uses: dschro-1993/vehicle-api-workflows/.github/workflows/cd.yml@0.1.0
     with:
-      working-directory: terraform/prod
-      environment:       prod
-      github:            ${{github}}
+      dir:    terraform/prod
+      env:    prod
+      github: ${{github}}
     secrets: inherit
     needs:   ci-prod
