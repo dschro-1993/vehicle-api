@@ -16,9 +16,9 @@ environment: prod
 
 jobs:
   ci-prod:
-    uses: dschro-1993/vehicle-api/.github/workflows/ci.yml@0.1.0
+    uses: dschro-1993/vehicle-api-workflows/.github/workflows/ci.yml@0.1.0
   cd-prod:
-    uses: dschro-1993/vehicle-api/.github/workflows/cd.yml@0.1.0
+    uses: dschro-1993/vehicle-api-workflows/.github/workflows/cd.yml@0.1.0
     with:
       working-directory: .terraform/prod
     secrets: inherit
