@@ -19,8 +19,8 @@ Resources:
   Role:
     Type: AWS::IAM::Role
     Properties:
-#     RoleName: <>
-#     ManagedPolicyArns: []
+#     RoleName:          Parameter
+#     ManagedPolicyArns: Parameter
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
