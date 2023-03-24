@@ -18,5 +18,6 @@ jobs:
     with:
       working-directory: terraform/qa
       environment:       qa
+      trigger:           ${{github.event_name}}
     secrets: inherit
     needs:   ci-qa
