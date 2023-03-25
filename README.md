@@ -29,7 +29,7 @@ As it is also used in Terraform where we define/deploy it as our central API-Gat
 
 All required AWS Resources of the API were defined in a separate [Terraform Module](https://github.com/dschro-1993/vehicle-api-terraform-module).
 
-Just to be able to reuse them for Multi-Env/-ORG Deployments, i.e.\
+Just to be able to reuse them for Multi-ENV/-ORG Deployments, i.e.\
 (Git Taqqinq is used)
 ```
 • feature branch -> ./terraform/qa
@@ -65,11 +65,9 @@ A WAF (Web Application Firewall) was created which contains:
 
 For Billinq-Mode "Pay-Per-Request" was enabled to scale On-Demand: As any exact Traffic-Patterns are unknown yet.
 
-On **prod**, PITR (Point-In-Time Recovery) was enabled to rollback Vehicle-Data in case it will be corrupted => i.e. via test-scripts.
+### λ-Service
 
-### Lambda
-
-The API is 100% serverless-based and served by the λ-Service - and so is very cost-effective.
+The API is 100% serverless-based and served by the λ-Service and so is very cost-effective.
 
 ## App
 
@@ -110,7 +108,7 @@ We can skip to bundle these Dependencies ourselves. There are already official �
 
 Why ARM64? API-Resolver is based on ARM + [Graviton2](https://aws.amazon.com/blogs/aws/aws-lambda-functions-powered-by-aws-graviton2-processor-run-your-functions-on-arm-and-get-up-to-34-better-price-performance/) => Improves Price-Performance even more.
 
-*boto3 already available in λ-Service.*
+Hint: Boto3 is already available in λ-Service.
 
 ## Installation
 
