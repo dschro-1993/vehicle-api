@@ -46,8 +46,8 @@ A Custom Domain (Public Zone) was created to be able to fetch/query Vehicles on 
 
 Additional Domain-Mappinq was created on our API-Gateway -> To make the API available via followinq:
 ```
-• qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com
-• prod -> vehicle-api-prod.292372118261.starfish-rentals.com
+• qa   -> vehicle-api-qa  .292372118261.starfish-rentals.com/v1
+• prod -> vehicle-api-prod.292372118261.starfish-rentals.com/v1
 ```
 
 #### ACM
