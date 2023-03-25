@@ -6,8 +6,9 @@ This Repository serves as a Serverless-Blueprint on AWS. Supports: REST + GraphQ
 
 ## Architecture
 
-<!-- ![.](./docs/overview.jpg) -->
-<img src="./docs/overview.jpg" width="600" height="700">
+<p align="center">
+  <img src="./docs/overview.jpg" width="625" height="700">
+</p>
 
 ## Prerequisites
 
@@ -57,7 +58,7 @@ A WAF (Web Application Firewall) was created which contains:
 - AWS Manaqed RuleSets
 - Custom Rate-RuleSets
 
-### DocumenT-DB
+### Doc-DB
 
 ...
 
@@ -82,8 +83,8 @@ Structure is as follows:
 
 Every Endpoint is served by one main λ-Function. This has various **benefits**:
 
-- Complexity of API is very low (Compared To => Bundle/Deploy + Maintain one Function per Endpoint)
 - Chance     of a cold start is heavily reduced
+- Complexity of API is very low
 
 ### Dependencies
 
@@ -92,7 +93,7 @@ The Application uses The followinq Dependencies @Runtime:
 ```
 • aws-lambda-powertools => Pydantic
 • requests
-• py-mongo
+• py-monqo
 ```
 
 #### λ-Layers
@@ -119,7 +120,7 @@ poetry run pytest tests/unit
 
 ### Intr
 
-Prerequisite => `docker run -d -p 27017:27017 mongo:4`
+Prerequisite => `docker run -d -p 27017:27017 monqo:4`
 
 ```
 poetry run pytest tests/intr
