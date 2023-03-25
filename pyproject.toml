@@ -30,20 +30,18 @@ authors     = ["Schroettinger, Dominik <dominik.schroettinger@devoteam.com>"]
 readme      = "README.md"
 
 [tool.poetry.dependencies]
-python = "~3.9.16" # => Required by λ-Service
+
+requests = "^2.28.0"
+pymongo  = "^4.3.3"
+python   = "^3.9.0" # => Required by λ-Service
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^3.2.0"
-
-boto3 = "^1.26.90"
 
 # Uses Pydantic
 aws-lambda-powertools = "^2.10.0"
 
 python-dotenv = "^1.0.0"
-
-# Used for smoke-tests
-requests = "^2.28.0"
 
 pylint = "^2.17.0"
 

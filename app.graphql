@@ -1,0 +1,47 @@
+enum Vendor {
+  Porsche
+  # ...
+}
+
+input VehicleCreateRequest {
+  vin:        String!
+  vendor:     Vendor!
+  model_type: String!
+  model_name: String!
+  power:      String!
+}
+
+input VehicleUpdateRequest {
+  vin:        String
+  vendor:     Vendor
+  model_type: String
+  model_name: String
+  power:      String
+}
+
+type Vehicle {
+  vin:        String!
+  vendor:     Vendor!
+  model_type: String!
+  model_name: String!
+  power:      String!
+  createdAt:  String!
+  updatedAt:  String!
+  id:         String!
+}
+
+type Mutation {
+  createVehicle(request: VehicleCreateRequest!): Vehicle
+  updateVehicle(request: VehicleUpdateRequest!,  id: ID!): Vehicle
+  deleteVehicle(id: ID!): Boolean
+}
+
+type Query {
+  findOne(id: ID!): Vehicle
+  findAll: [Vehicle] # => (offset, size, sort)
+}
+
+schema {
+  mutation: Mutation
+  query: Query
+}
