@@ -122,9 +122,7 @@ components:
     Vendor:
       type: string
       enum:
-        - VW
-        - BMW
-        - AUDI
+        - Porsche
       # - ...
     VehicleCreateRequest:
       type: object
