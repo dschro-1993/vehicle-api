@@ -7,7 +7,7 @@ This Repository serves as a Serverless-Blueprint on AWS. Supports: REST + GraphQ
 ## Architecture
 
 <p align="center">
-  <img src="./docs/overview.jpg" width="625" height="700">
+  <img src="./docs/overview.jpg" width="500" height="600">
 </p>
 
 ## Prerequisites
