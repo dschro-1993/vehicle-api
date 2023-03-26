@@ -18,11 +18,11 @@ This Repository serves as a Serverless-Blueprint on AWS. Supports: REST + GraphQ
 
 ## GraphQL
 
-...
+Todo: Adjustments
 
 ## OpenAPI
 
-...
+Todo: Adjustments
 
 ## Infra
 
