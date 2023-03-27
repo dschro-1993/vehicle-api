@@ -38,7 +38,7 @@ type Mutation {
 
 type Query {
   findOne(id: ID!): Vehicle
-  findAll: [Vehicle] # => (offset, size, sort)
+  findAll: [Vehicle] # Todo => (offset, size, sort)
 }
 
 schema {
