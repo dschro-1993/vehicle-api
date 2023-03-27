@@ -27,7 +27,7 @@ type Vehicle {
   power:      String!
   createdAt:  String!
   updatedAt:  String!
-  id:         String!
+  id:         ID!
 }
 
 type Mutation {
@@ -43,5 +43,5 @@ type Query {
 
 schema {
   mutation: Mutation
-  query: Query
+  query:    Query
 }
