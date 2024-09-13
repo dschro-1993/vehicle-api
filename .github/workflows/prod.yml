@@ -1,0 +1,28 @@
+name: cicd-prod
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  id-token:      write
+  contents:      write
+
+jobs:
+  ci:
+    uses: dschro-1993/vehicle-api-workflows/.github/workflows/ci.yml@0.1.0
+  cd:
+    needs: ci
+    secrets: inherit
+    uses: dschro-1993/vehicle-api-workflows/.github/workflows/cd.yml@0.1.0
+    with:
+      backend:  tfvars/prod/backend.conf
+      var-file: tfvars/prod/api.tfvars
+      env:      prod
+    
+  # {...}
+
+# {...}

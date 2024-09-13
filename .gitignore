@@ -1,0 +1,13 @@
+.pytest_cache/
+
+requirements.zip
+archive.zip
+
+__pycache__
+
+.coverage
+
+.terraform.lock.hcl
+.terraform/
+
+.venv/

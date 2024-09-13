@@ -1,0 +1,10 @@
+# version: 2
+# updates:
+#   - package-ecosystem: "pip"
+#     directory: "/"
+#     schedule:
+#       interval: "daily"
+#       timezone: "Europe/Berlin"
+#       time:     "08:00"
+
+# {...}
