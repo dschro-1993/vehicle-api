@@ -1,15 +1,8 @@
 """V1-Endpoints"""
 
 import os
-import uuid
-import typing
 
 from datetime import datetime
-
-import boto3
-import requests
-
-from aws_lambda_powertools.event_handler.openapi.params import Query
 
 from aws_lambda_powertools.event_handler.exceptions import (
   ServiceError
@@ -20,114 +13,112 @@ from aws_lambda_powertools import (
   Logger,
 )
 
-from cross_account import assume_role_for_account_id
-
-from dynamo import Dynamo
 from mapper import Mapper
 
 from models import (
+  FilterCriteria,
   VehicleCreateRequest,
   VehicleUpdateRequest,
   VehicleEntity,
   VehicleDTO,
 )
 
-VehicleTableName = os.environ["TABLE_NAME"]
+from db import DB
 
-v1Router = event_handler.api_gateway.Router()
+CollectionName = os.environ["COLLECTION_NAME"]
 
-dynamo = Dynamo()
+v1_router = event_handler.api_gateway.Router()
+
 mapper = Mapper()
 logger = Logger()
+
+d = DB()
 
 # --- Experimental Stuff
 
 # To Show i.e.:
-# - How To Include and Use Custom-Requirements, i.e. like "requests"
-# - How To Make Cross-Account Calls and How To Cache STS-Credentials
+# - How To Add and Use any Custom-Requirement => like "requests"?
 # - {...} 
 
-@v1Router.get("/Volumes")
-def search(account_id: typing.Annotated[str, Query(pattern=r"^\d{12}$")]) -> dict:
-  """..."""
-  req = requests.get("HTTPS://www.google.com", timeout=10)
-  logger.debug(req)
+# @v1_router.get("/foobaz")
+# def foobaz(q: typing.Annotated[str, Query(pattern=r"^\d{12}$")]) -> dict:
+#   r = requests.get(f"https://www.google.com?q={q}", timeout=10)
+#   logger.info(r)
+#   return r
 
-  assume = assume_role_for_account_id(account_id)
-  if assume is None:
-    raise ServiceError(404, f"No Account was found for 'account_id={account_id}'")
+# --- Vehicle
 
-  client = boto3.client("ec2", aws_access_key_id=assume["AccessKeyId"], aws_secret_access_key=assume["SecretAccessKey"], aws_session_token=assume["SessionToken"])
-  return (
-    client
-    .describe_volumes(
-    # VolumeIds=[]
-    # Filters=[]
-    # {...}
-    )
-  )
-
-# --- Vehicle Crud-Ops
-
-@v1Router.delete("/<id>")
-def delete(id: str) -> None:
-  """Delete Vehicle"""
-  dynamo.delete(VehicleTableName, {"Id": id})
+@v1_router.delete("/<id>")
+def delete_one(id: str) -> None:
+  """Todo"""
+  d.delete_one(CollectionName, {"_id": id})
   # Idempotent Call => 200
+  # {...}
 
-def lookup_by_id(id: str) -> dict:
-  item = dynamo.lookup(VehicleTableName, {"Id": id})
-  if item is None:
-    raise ServiceError(404, f"No Vehicle Found was found for id={id}")
-  return item
+@v1_router.get("/search")
+def search(query: FilterCriteria) -> list[VehicleDTO]:
+  """Todo"""
+  # In Pydantic v2 please use:
+  # {...}
+  # class {...}
+  #   @field_validator("sort", mode="before")
+  #   def transform(cls, raw: dict) -> list[tuple[str, int]]:
+  #     return [(k,v) for k,v in query.sort.items()]
 
-@v1Router.get("/<id>")
-def lookup(id: str) -> VehicleDTO:
-  """Lookup Vehicle"""
-  item = lookup_by_id(id)
+  query.sort = [(k,v) for k,v in query.sort.items()]
 
-  return (
+  # Todo: Parse query => For un/known Attrs across: keys, aggregation, sort
+
+  r = d.search(CollectionName, **query.dict())
+  return [
     mapper.as_DTO(
-      VehicleEntity(
-        **item
-      )
-    )
-  )
+      VehicleEntity.parse_obj(x)
+    ) for x in r
+  ]
 
-@v1Router.put("/<id>")
-def update(body: VehicleUpdateRequest, id: str) -> VehicleDTO:
-  """Update Vehicle"""
-  item = lookup_by_id(id)
+@v1_router.get("/<id>")
+def search_one(id: str) -> VehicleDTO:
+  """Todo"""
+  result = d.search_one(CollectionName, {"_id": id})
+  if result is None:
+    raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
 
-  timestamp = datetime.now().isoformat()
-  entity = VehicleEntity(**{ # Improve => How To combine Body + internal Values w/o wrapping into a new Object?
-    **item,
-    # As 2nd, To Override Attrs from found Item!
-    **body.dict(exclude_none = True),
-  # "CreatedAt": timestamp,
-    "UpdatedAt": timestamp,
-  })
-  dynamo.create(VehicleTableName, entity.dict())
+  entity = VehicleEntity.parse_obj(result)
   return (
     mapper.as_DTO(
       entity
     )
   )
 
-@v1Router.post("/")
-def create(body: VehicleCreateRequest) -> VehicleDTO:
-  """Create Vehicle"""
-  timestamp = datetime.now().isoformat()
-  entity = VehicleEntity(**{ # Improve => How To combine Body + internal Values w/o wrapping into a new Object?
-    **body.dict(exclude_none = True),
-    "TracingId": v1Router.current_event["headers"]["X-Amzn-Trace-Id"],
-    "CreatedAt": timestamp,
-    "UpdatedAt": timestamp,
-    "Id": str(uuid.uuid4()),
-  })
-  dynamo.create(VehicleTableName, entity.dict())
+@v1_router.put("/<id>")
+def update_one(id: str, body: VehicleUpdateRequest) -> VehicleDTO:
+  """Todo"""
+  update = {**body.dict(exclude_none=True), "UpdatedAt": datetime.now()}
+
+  result = d.update_one(CollectionName, {"_id": id}, update)
+  if result is None:
+    raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
+
+  entity = VehicleEntity.parse_obj(result)
   return (
     mapper.as_DTO(
       entity
     )
   )
+
+@v1_router.post("/")
+def insert_one(body: VehicleCreateRequest) -> VehicleDTO:
+  """Todo"""
+  TracingId = v1_router.current_event["headers"]["X-Amzn-Trace-Id"]
+
+  create = {**body.dict(exclude_none=True), "TracingId": TracingId}
+  entity = VehicleEntity.parse_obj(create)
+
+  d.insert_one(CollectionName, entity.dict(by_alias=True))
+  return (
+    mapper.as_DTO(
+      entity
+    )
+  )
+
+# {...}

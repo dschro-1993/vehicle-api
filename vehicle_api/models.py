@@ -2,6 +2,13 @@
 
 import inspect
 
+from datetime import datetime
+
+from uuid import (
+  uuid4,
+  UUID,
+)
+
 from typing import (
   Callable,
   Optional,
@@ -18,7 +25,7 @@ def optional_attrs(*fields) -> Callable:
   """
   def func(_class):
     # It loops over Class-Fields and sets Pydantic-Attribute "required" = False
-    # {Only possible in Pydantic v1!}
+    # {Works only in Pydantic v1!}
     for field in fields:
       _class.__fields__[field].required = False
     return _class
@@ -30,37 +37,22 @@ def optional_attrs(*fields) -> Callable:
 
   return func
 
-def immutable(
-  min_length: Optional[int] = None,
-  max_length: Optional[int] = None,
-  regex:      Optional[str] = None,
-# {...}
-) -> Field:
-  """Immutable-Wrapper"""
-  return Field(
-    frozen = True, # => Makes any Attribute immutable after initial Assignment!
-    min_length = min_length,
-    max_length = max_length,
-    regex = regex,
-  )
+class FilterCriteria(BaseModel):
+  filter:      dict = {}
+  aggregation: dict = {}
+  sort:        dict = {}
+  limit:       int  = 50 # => Todo: Env-Var + MAX_VALUE ...
+  skip:        int  = 0
 
 class Shared(BaseModel):
   """
   Attributes shared across all Vehicle-Objects
   """
-  Vin:       str = immutable(min_length = 17, max_length = 17)
-  ModelType: str = immutable(max_length = 99)
-  ModelName: str = immutable(max_length = 99)
-  Power:     str = immutable(max_length = 3)
+  Vin:       str = Field(frozen = True, min_length = 17, max_length = 17)
+  ModelType: str = Field(frozen = True, max_length = 99)
+  ModelName: str = Field(frozen = True, max_length = 99)
+  Power:     int = Field(frozen = True, lt = 1500)
 # {...}
-
-class VehicleDTO(Shared):
-  """
-  Vehicle-DTO, exchanged with API-Users
-  """
-  Id:        str # = Immutable(regex = r"^{...}$")
-  CreatedAt: str # = Immutable(regex = r"^{...}$")
-  UpdatedAt: str # = Immutable(regex = r"^{...}$")
 
 @optional_attrs
 class VehicleUpdateRequest(Shared):
@@ -73,11 +65,24 @@ class VehicleCreateRequest(Shared):
   Model used To Create a Vehicle
   """
 
-class VehicleEntity(VehicleDTO):
+def _uuid4_as_str() -> str:
+  return str(uuid4())
+
+class VehicleEntity(Shared):
   """
   Vehicle-Entity, saved in DB
   """
-# ExpiresAt: int
+  CreatedAt: datetime = Field(default_factory = datetime.now)
+  UpdatedAt: datetime = Field(default_factory = datetime.now)
   TracingId: str
+  Id:        str = Field(default_factory = _uuid4_as_str, alias = "_id")
+
+class VehicleDTO(Shared):
+  """
+  Vehicle-DTO
+  """
+  CreatedAt: datetime
+  UpdatedAt: datetime
+  Id:        str
 
 # {...}

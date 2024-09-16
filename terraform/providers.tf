@@ -10,7 +10,13 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-1"
-  default_tags {tags = var.default_tags}
-# {...}
+  # {...}
+  # assume_role {
+  #   role_arn     = "arn:aws:iam::{account-id}:role/{role-name}"
+  #   session_name = "terraform-session"
+  #   duration     = 900
+  # }
+  default_tags { tags = var.tags }
+  region = var.region
+  # {...}
 }

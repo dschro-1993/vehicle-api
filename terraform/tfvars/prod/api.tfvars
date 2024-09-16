@@ -1,13 +1,16 @@
+tags = {
+  COST_CENTER = "001" # => Just as an example!
+  # {...}
+}
+
+env_vars = {
+  POWERTOOLS_LOG_LEVEL = "ERROR"
+
+  MONGODB_URI     = "<>"
+  COLLECTION_NAME = "vehicles_prod"
+  # {...}
+}
+
 env = "prod"
 
 # {...}
-
-environment_variables = {
-  POWERTOOLS_LOG_LEVEL = "ERROR"
-  # {...}
-}
-
-default_tags = {
-  COST_CENTER = "001" # => Just as an example
-  # {...}
-}

@@ -11,7 +11,7 @@ Parameters:
     Type: String
 
 Conditions:
-  CreateOIDCProvider: !Equals
+  BuildOIDCProvider: !Equals
     - !Ref OIDCProviderArn
     - ""
 
@@ -20,32 +20,29 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName:          # Todo: Add Parameter
-      ManagedPolicyArns: ["arn:aws:iam::aws:policy/AdministratorAccess"]
+      ManagedPolicyArns: ["arn:aws:iam::aws:policy/AdministratorAccess"] # Todo
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
             Action: sts:AssumeRoleWithWebIdentity
             Principal:
               Federated: !If
-                - CreateOIDCProvider
-                - !Ref GithubOidc
+                - BuildOIDCProvider
                 - !Ref OIDCProviderArn
+                - !Ref GithubOIDC
             Condition:
-              StringEquals:
-                token.actions.githubusercontent.com:aud: !Ref OIDCAudience
               StringLike:
                 token.actions.githubusercontent.com:sub: !Sub repo:${GitHubORG}/${RepositoryName}:*
+              StringLike:
+                token.actions.githubusercontent.com:aud: !Ref OIDCAudience
 
-  GithubOidc:
-    Type:  AWS::IAM::OIDCProvider
-    Condition: CreateOIDCProvider
+  GithubOIDC:
+    Type: AWS::IAM::OIDCProvider
+    Condition: BuildOIDCProvider
     Properties:
       Url: https://token.actions.githubusercontent.com
-      ThumbprintList:
-        - 6938fd4d98bab03faadb97b34396831e3780aea1
-      ClientIdList:
-        - sts.amazonaws.com
+      ThumbprintList: ["6938fd4d98bab03faadb97b34396831e3780aea1"]
+      ClientIdList:   ["sts.amazonaws.com"]
+    # {...}
 
-Outputs:
-  Role:
-    Value: !GetAtt Role.Arn
+# {...}

@@ -1,5 +1,5 @@
 [tool.pylint.MASTER]
-indent-string="  "
+indent-string = "  "
 
 [tool.pytest.ini_options]
 pythonpath  = "vehicle_api"
@@ -11,11 +11,21 @@ version     = "0.1.0-rc"
 description = "vehicle-api {...}"
 authors     = ["Schroettinger, Dominik <dominik.schroettinger@devoteam.com>"]
 readme      = "README.md"
+keywords = [
+  "lambda",
+  "python",
+  "terraform",
+  "serverless",
+  "aws_lambda",
+  "aws",
+]
 
 [tool.poetry.dependencies]
 
-requests = "^2.32.2" # ==> Bundled as λ-Layer in our Terraform-Module
-python   = "^3.12.0"
+requests = "^2.32.2" # => Bundled as λ-Layer in our Terraform-Module
+pymongo  = {extras = ["srv"], version = "^4.8.0"}
+
+python = ">=3.12.0,<4.0.0"
 
 [tool.poetry.dev-dependencies]
 
@@ -27,7 +37,7 @@ freezegun = "^1.5.0"
 
 coverage = "^7.6.0"
 
-pydantic-factories = "^1.17.0" # ==> Use "polyfactory" instead!
+pydantic-factories = "^1.17.0" # => Use "poly-factory" instead!
 
 # Ships Pydantic, etc.
 aws-lambda-powertools = {extras = ["all"], version = "^2.43.0"}
