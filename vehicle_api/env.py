@@ -19,8 +19,8 @@ def _env_var(key: str, typecast: Type[T] = str, fallback: T = None) -> T:
 
 #  ---
 
-MONGODB_URI     = _env_var("MONGODB_URI")
 COLLECTION_NAME = _env_var("COLLECTION_NAME")
+MONGODB_URI     = _env_var("MONGODB_URI")
 
 LIMIT = _env_var("LIMIT", int, 50)
 
