@@ -14,7 +14,19 @@ from aws_lambda_powertools import (
 logger = Logger()
 tracer = Tracer()
 
-class DB:
+class DBSingleton(type):
+  """Todo"""
+  _instances = {}
+
+  def __call__(cls, *args, **kwargs):
+    """Todo"""
+    if cls in cls._instances: return cls._instances[cls]
+    else:
+      instance = super().__call__(*args, **kwargs)
+      cls._instances[cls] = instance
+      return instance
+
+class DB(metaclass=DBSingleton):
   """
   For docs please see here:
   https://www.mongodb.com/docs/languages/python/pymongo-driver/current/
