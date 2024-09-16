@@ -84,9 +84,9 @@ class DB:
     https://www.mongodb.com/docs/languages/python/pymongo-driver/current/write/insert/#insert-one-document
     """
     try:
-      result = self.db[collection_name].insert_one(entity)
+      self.db[collection_name].insert_one(entity)
       logger.debug(
-        "In Collection '%s' created Entity: %s",
+        "In Collection %s created an Entity: %s",
         collection_name,
         entity,
       )
@@ -102,9 +102,9 @@ class DB:
     https://www.mongodb.com/docs/languages/python/pymongo-driver/current/write/delete/#delete-one-document
     """
     try:
-      result = self.db[collection_name].delete_one(filter)
+      self.db[collection_name].delete_one(filter)
       logger.debug(
-        "In Collection '%s' deleted Entity: %s",
+        "In Collection %s deleted an Entity: %s",
         collection_name,
         filter,
       )
