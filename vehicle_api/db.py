@@ -1,6 +1,6 @@
 """DB for Vehicle-API"""
 
-import os
+import env
 
 from pymongo.cursor import Cursor
 
@@ -33,7 +33,7 @@ class DB(metaclass=DBSingleton):
   """
   def __init__(self) -> None:
     self.db = (
-      MongoClient(f"{os.environ["MONGODB_URI"]}?uuidRepresentation=standard")
+      MongoClient(f"{env.MONGODB_URI}?uuidRepresentation=standard")
       ["db"] # Todo
     )
 

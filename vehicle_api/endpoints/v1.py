@@ -1,6 +1,6 @@
 """V1-Endpoints"""
 
-import os
+import env
 
 from datetime import datetime
 
@@ -25,7 +25,7 @@ from models import (
 
 from db import DB
 
-CollectionName = os.environ["COLLECTION_NAME"]
+CollectionName = env.COLLECTION_NAME
 
 v1_router = event_handler.api_gateway.Router()
 
@@ -67,7 +67,7 @@ def search(query: FilterCriteria) -> list[VehicleDTO]:
 
   query.sort = [(k,v) for k,v in query.sort.items()]
 
-  # Todo: Parse query => For un/known Attrs across: keys, aggregation, sort
+  # Todo: Parse query => For unknown Attrs across: Filter, Aggregation, Sort, {...}
 
   r = d.search(CollectionName, **query.dict())
   return [

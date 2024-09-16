@@ -1,5 +1,6 @@
 """Models for Vehicle-API"""
 
+import env
 import inspect
 
 from datetime import datetime
@@ -41,7 +42,7 @@ class FilterCriteria(BaseModel):
   filter:      dict = {}
   aggregation: dict = {}
   sort:        dict = {}
-  limit:       int  = 50 # => Todo: Env-Var + MAX_VALUE ...
+  limit:       int  = env.LIMIT # => Todo: MAX_VALUE ...
   skip:        int  = 0
 
 class Shared(BaseModel):
