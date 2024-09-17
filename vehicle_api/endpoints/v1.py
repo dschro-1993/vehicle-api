@@ -58,14 +58,11 @@ def delete_one(id: str) -> None:
 @v1_router.get("/search")
 def search(query: FilterCriteria) -> list[VehicleDTO]:
   """Todo"""
-  # In Pydantic v2 please use:
-  # {...}
-  # class {...}
-  #   @field_validator("sort", mode="before")
-  #   def transform(cls, raw: dict) -> list[tuple[str, int]]:
-  #     return [(k,v) for k,v in query.sort.items()]
+# {...}
+  query.sort = [(key, val) for key, val in query.sort.items()]
 
-  query.sort = [(k,v) for k,v in query.sort.items()]
+# if query.limit and query.limit > env.LIMIT_MAXIUM:
+#    query.limit = env.LIMIT_MAXIUM
 
   # Todo: Parse query => For unknown Attrs across: Filter, Aggregation, Sort, {...}
 

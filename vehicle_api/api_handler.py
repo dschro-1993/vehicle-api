@@ -4,8 +4,11 @@ from aws_lambda_powertools.utilities.typing import (
   LambdaContext
 )
 
+from aws_lambda_powertools.event_handler.middlewares import NextMiddleware
+
 from aws_lambda_powertools.event_handler import (
   APIGatewayRestResolver,
+  Response,
 )
 
 from aws_lambda_powertools import (
@@ -26,10 +29,26 @@ api = APIGatewayRestResolver(
 # Add CORS for UI
 )
 
+def _is_valid(Token: str | None) -> bool:
+  return False
+
+def swagger_middleware(api: APIGatewayRestResolver, middleware: NextMiddleware) -> Response:
+  Token = api.current_event.headers["Authorization"] # Todo
+# {...}
+  if _is_valid(Token):
+    return middleware(api) # => Pass on
+
+  return (
+    Response(
+      400
+    )
+  )
+
 api.enable_swagger(
   title   = "Vehicle-API",
   summary = "Vehicle-API {...}",
   version = "0.1.0-rc", # Todo: Extract from "pyproject.toml"
+  middlewares = [swagger_middleware],
 # {...}
 )
 

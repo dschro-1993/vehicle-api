@@ -24,7 +24,8 @@ MONGODB_PASSWORD_SSM_PARAMETER = _env_var("MONGODB_PASSWORD_SSM_PARAMETER")
 
 COLLECTION = _env_var("COLLECTION")
 
-LIMIT = _env_var("LIMIT", int, 100)
+LIMIT_MAXIMUM = _env_var("LIMIT_MAXIMUM", int, 10000)
+LIMIT         = _env_var("LIMIT", int, 100)
 
 ENV = _env_var("ENV")
 
