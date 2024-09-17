@@ -17,7 +17,7 @@ from endpoints.v1 import (
   v1_router,
 )
 
-logger = Logger()
+logger = Logger(log_uncaught_exceptions = True)
 tracer = Tracer()
 
 api = APIGatewayRestResolver(
@@ -43,7 +43,8 @@ api.include_router(v1_router, prefix = "/v1")
 def handler(request: dict, context: LambdaContext) -> dict:
   """Entrypoint for Vehicle-API"""
 # context.identity => Can be used for various Python-Decorators like: @PreAuthorize("hasRole('Admin')")
-  logger.info("Request: '%s'", request)
+  logger.append_keys(**context.__dict__)
+  logger.debug("Request: '%s'", request)
   return api.resolve(
     request,
     context,

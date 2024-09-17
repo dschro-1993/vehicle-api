@@ -2,9 +2,12 @@
 
 import env
 
+from pymongo.errors import PyMongoError
 from pymongo.cursor import Cursor
 
 from pymongo import MongoClient
+
+from aws_lambda_powertools.utilities import parameters
 
 from aws_lambda_powertools import (
   Logger,
@@ -21,10 +24,10 @@ class DBSingleton(type):
   def __call__(cls, *args, **kwargs):
     """Todo"""
     if cls in cls._instances: return cls._instances[cls]
-    else:
-      instance = super().__call__(*args, **kwargs)
-      cls._instances[cls] = instance
-      return instance
+
+    instance = super().__call__(*args, **kwargs)
+    cls._instances[cls] = instance
+    return instance
 
 class DB(metaclass=DBSingleton):
   """
@@ -32,10 +35,16 @@ class DB(metaclass=DBSingleton):
   https://www.mongodb.com/docs/languages/python/pymongo-driver/current/
   """
   def __init__(self) -> None:
+    MONGODB_URI = parameters.get_parameter(
+      env.MONGODB_URI_SSM_PARAM,
+      decrypt = True,
+      max_age = 1000,
+    )
     self.db = (
-      MongoClient(f"{env.MONGODB_URI}?uuidRepresentation=standard")
+      MongoClient(f"{MONGODB_URI}?uuidRepresentation=standard")
       ["db"] # Todo
     )
+    # {...}
 
   @staticmethod
   def _unpack_cursor(cursor: Cursor) -> list[dict]:
@@ -52,8 +61,8 @@ class DB(metaclass=DBSingleton):
       cur = self.db[collection_name].find(filter, aggregation, sort=sort, limit=limit, skip=skip)
     # logger.debug(cur)
       return DB._unpack_cursor(cur)
-    except Exception as exp:
-      logger.error(exp)
+    except PyMongoError as exp:
+      logger.exception(exp)
       raise exp
       # {...}
 
@@ -67,8 +76,8 @@ class DB(metaclass=DBSingleton):
       doc = self.db[collection_name].find_one(filter)
       logger.debug(doc)
       return doc
-    except Exception as exp:
-      logger.error(exp)
+    except PyMongoError as exp:
+      logger.exception(exp)
       raise exp
       # {...}
 
@@ -86,8 +95,8 @@ class DB(metaclass=DBSingleton):
       )
       logger.debug(doc)
       return doc
-    except Exception as exp:
-      logger.error(exp)
+    except PyMongoError as exp:
+      logger.exception(exp)
       raise exp
       # {...}
 
@@ -104,8 +113,8 @@ class DB(metaclass=DBSingleton):
         collection_name,
         entity,
       )
-    except Exception as exp:
-      logger.error(exp)
+    except PyMongoError as exp:
+      logger.exception(exp)
       raise exp
       # {...}
 
@@ -122,8 +131,8 @@ class DB(metaclass=DBSingleton):
         collection_name,
         filter,
       )
-    except Exception as exp:
-      logger.error(exp)
+    except PyMongoError as exp:
+      logger.exception(exp)
       raise exp
       # {...}
 

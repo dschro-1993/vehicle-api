@@ -4,10 +4,12 @@ tags = {
 }
 
 env_vars = {
-  POWERTOOLS_LOG_LEVEL = "DEBUG"
+  POWERTOOLS_SERVICE_NAME = "serverless-airline"
+  POWERTOOLS_LOG_LEVEL    = "DEBUG"
 
-  MONGODB_URI     = "<>"
-  COLLECTION_NAME = "vehicles_qa"
+  COLLECTION_NAME       = "vehicles_qa"
+  MONGODB_URI_SSM_PARAM = "qa_MONGODB_URI"
+  ENV                   = "qa"
   # {...}
 }
 

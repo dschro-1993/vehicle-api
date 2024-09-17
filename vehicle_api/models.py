@@ -66,9 +66,6 @@ class VehicleCreateRequest(Shared):
   Model used To Create a Vehicle
   """
 
-def _uuid4_as_str() -> str:
-  return str(uuid4())
-
 class VehicleEntity(Shared):
   """
   Vehicle-Entity, saved in DB
@@ -76,7 +73,7 @@ class VehicleEntity(Shared):
   CreatedAt: datetime = Field(default_factory = datetime.now)
   UpdatedAt: datetime = Field(default_factory = datetime.now)
   TracingId: str
-  Id:        str = Field(default_factory = _uuid4_as_str, alias = "_id")
+  Id:        str = Field(default_factory = lambda: f"{uuid4()}", alias = "_id")
 
 class VehicleDTO(Shared):
   """
