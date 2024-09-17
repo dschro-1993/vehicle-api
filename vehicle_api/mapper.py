@@ -6,7 +6,7 @@ from models import (
 )
 
 class Mapper:
-  """Mapper-Class for Domain-Driven Design"""
+  """Mapper-Class for DDD => https://martinfowler.com/bliki/DomainDrivenDesign.html"""
   def as_DTO(self, entity: VehicleEntity) -> VehicleDTO:
     """
     Transforms VehicleEntity => VehicleDTO
