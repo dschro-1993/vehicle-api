@@ -25,7 +25,7 @@ from models import (
 
 from db import DB
 
-CollectionName = env.COLLECTION_NAME
+Collection = env.COLLECTION
 
 v1_router = event_handler.api_gateway.Router()
 
@@ -51,7 +51,7 @@ d = DB()
 @v1_router.delete("/<id>")
 def delete_one(id: str) -> None:
   """Todo"""
-  d.delete_one(CollectionName, {"_id": id})
+  d.delete_one(Collection, {"_id": id})
   # Idempotent Call => 200
   # {...}
 
@@ -69,7 +69,7 @@ def search(query: FilterCriteria) -> list[VehicleDTO]:
 
   # Todo: Parse query => For unknown Attrs across: Filter, Aggregation, Sort, {...}
 
-  r = d.search(CollectionName, **query.dict())
+  r = d.search(Collection, **query.dict())
   return [
     mapper.as_DTO(
       VehicleEntity.parse_obj(x)
@@ -79,7 +79,7 @@ def search(query: FilterCriteria) -> list[VehicleDTO]:
 @v1_router.get("/<id>")
 def search_one(id: str) -> VehicleDTO:
   """Todo"""
-  result = d.search_one(CollectionName, {"_id": id})
+  result = d.search_one(Collection, {"_id": id})
   if result is None:
     raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
 
@@ -95,7 +95,7 @@ def update_one(id: str, body: VehicleUpdateRequest) -> VehicleDTO:
   """Todo"""
   update = {**body.dict(exclude_none=True), "UpdatedAt": datetime.now()}
 
-  result = d.update_one(CollectionName, {"_id": id}, update)
+  result = d.update_one(Collection, {"_id": id}, update)
   if result is None:
     raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
 
@@ -114,7 +114,7 @@ def insert_one(body: VehicleCreateRequest) -> VehicleDTO:
   create = {**body.dict(exclude_none=True), "TracingId": TracingId}
   entity = VehicleEntity.parse_obj(create)
 
-  d.insert_one(CollectionName, entity.dict(by_alias=True))
+  d.insert_one(Collection, entity.dict(by_alias=True))
   return (
     mapper.as_DTO(
       entity

@@ -4,12 +4,17 @@ tags = {
 }
 
 env_vars = {
-  POWERTOOLS_SERVICE_NAME = "serverless-airline"
-  POWERTOOLS_LOG_LEVEL    = "WARNING"
+  POWERTOOLS_SERVICE_NAME = "serverless-airline-booking"
+  POWERTOOLS_LOG_LEVEL    = "ERROR"
 
-  COLLECTION_NAME       = "vehicles_prod"
-  MONGODB_URI_SSM_PARAM = "prod_MONGODB_URI"
-  ENV                   = "prod"
+  POWERTOOLS_PARAMETERS_SSM_DECRYPT = !false
+  POWERTOOLS_PARAMETERS_MAX_AGE     = 300
+
+  MONGODB_USERNAME_SSM_PARAMETER = "MONGODB_USERNAME"
+  MONGODB_PASSWORD_SSM_PARAMETER = "MONGODB_PASSWORD"
+  MONGODB_ENDPOINT               = "<>"
+  COLLECTION                     = "vehicles_prod"
+  ENV                            = "prod"
   # {...}
 }
 

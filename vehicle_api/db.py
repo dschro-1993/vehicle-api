@@ -7,7 +7,7 @@ from pymongo.cursor import Cursor
 
 from pymongo import MongoClient
 
-from aws_lambda_powertools.utilities import parameters
+from aws_lambda_powertools.utilities.parameters import get_parameter
 
 from aws_lambda_powertools import (
   Logger,
@@ -23,19 +23,17 @@ class DB(): # Todo: metaclass=Singleton
   https://www.mongodb.com/docs/languages/python/pymongo-driver/current/
   """
   def __init__(self) -> None:
-    MONGODB_URI = parameters.get_parameter(
-      env.MONGODB_URI_SSM_PARAM,
-      decrypt = True,
-      max_age = 1000,
-    )
+    opts = "uuidRepresentation=standard" # {...}
+    username = get_parameter(env.MONGODB_USERNAME_SSM_PARAMETER)
+    password = get_parameter(env.MONGODB_PASSWORD_SSM_PARAMETER)
+    uri = f"mongodb+srv://{username}:{password}@{env.MONGODB_ENDPOINT}?{opts}"
     self.db = (
-      MongoClient(f"{MONGODB_URI}?uuidRepresentation=standard")
-      ["db"] # Todo
+      MongoClient(uri)
+      ["db"]
     )
-    # {...}
 
   @staticmethod
-  def _unpack_cursor(cursor: Cursor) -> list[dict]:
+  def _unload_cursor(cursor: Cursor) -> list[dict]:
     return list(cursor)
   # {...}
 
@@ -47,11 +45,11 @@ class DB(): # Todo: metaclass=Singleton
     """
     try:
       cur = self.db[collection_name].find(filter, aggregation, sort=sort, limit=limit, skip=skip)
-    # logger.debug(cur)
-      return DB._unpack_cursor(cur)
-    except PyMongoError as exp:
-      logger.exception(exp)
-      raise exp
+    # logger.debug({...})
+      return DB._unload_cursor(cur)
+    except PyMongoError as err:
+      logger.exception(err)
+      raise err
       # {...}
 
   @tracer.capture_method()
@@ -62,11 +60,11 @@ class DB(): # Todo: metaclass=Singleton
     """
     try:
       doc = self.db[collection_name].find_one(filter)
-      logger.debug(doc)
+      logger.debug("Document: %s", doc)
       return doc
-    except PyMongoError as exp:
-      logger.exception(exp)
-      raise exp
+    except PyMongoError as err:
+      logger.exception(err)
+      raise err
       # {...}
 
   @tracer.capture_method()
@@ -81,11 +79,11 @@ class DB(): # Todo: metaclass=Singleton
         {"$set": update},
         return_document = True,
       )
-      logger.debug(doc)
+      logger.debug("Document: %s", doc)
       return doc
-    except PyMongoError as exp:
-      logger.exception(exp)
-      raise exp
+    except PyMongoError as err:
+      logger.exception(err)
+      raise err
       # {...}
 
   @tracer.capture_method()
@@ -101,9 +99,9 @@ class DB(): # Todo: metaclass=Singleton
         collection_name,
         entity,
       )
-    except PyMongoError as exp:
-      logger.exception(exp)
-      raise exp
+    except PyMongoError as err:
+      logger.exception(err)
+      raise err
       # {...}
 
   @tracer.capture_method()
@@ -119,9 +117,9 @@ class DB(): # Todo: metaclass=Singleton
         collection_name,
         filter,
       )
-    except PyMongoError as exp:
-      logger.exception(exp)
-      raise exp
+    except PyMongoError as err:
+      logger.exception(err)
+      raise err
       # {...}
 
 # {...}

@@ -18,10 +18,13 @@ def _env_var(key: str, typecast: Type[T] = str, fallback: T = None) -> T:
 # {...}
 
 #  ---
-MONGODB_URI_SSM_PARAM = _env_var("MONGODB_URI_SSM_PARAM")
-COLLECTION_NAME       = _env_var("COLLECTION_NAME")
+MONGODB_ENDPOINT               = _env_var("MONGODB_ENDPOINT")
+MONGODB_USERNAME_SSM_PARAMETER = _env_var("MONGODB_USERNAME_SSM_PARAMETER")
+MONGODB_PASSWORD_SSM_PARAMETER = _env_var("MONGODB_PASSWORD_SSM_PARAMETER")
 
-LIMIT = _env_var("LIMIT", int, 50)
+COLLECTION = _env_var("COLLECTION")
+
+LIMIT = _env_var("LIMIT", int, 100)
 
 ENV = _env_var("ENV")
 
