@@ -2,12 +2,12 @@
 indent-string = "  "
 
 [tool.pytest.ini_options]
-pythonpath  = "vehicle_api"
+pythonpath  = "api"
 addopts     = "-ra -v" # -ra => full test summary
 
 [tool.poetry]
 name        = "vehicle-api"
-version     = "0.1.0-rc"
+version     = "0.1.0"
 description = "vehicle-api {...}"
 authors     = ["Schroettinger, Dominik <dominik.schroettinger@devoteam.com>"]
 readme      = "README.md"
@@ -31,16 +31,16 @@ python = ">=3.12.0,<4.0.0"
 
 boto3 = "^1.35.15"
 
+pydantic-factories = "^1.17.0" # => Use "poly-factory" instead!
+
+# Ships Pydantic, etc.
+aws-lambda-powertools = {extras = ["all"], version = "^2.43.0"}
+
 python-dotenv = "^1.0.0"
 
 freezegun = "^1.5.0"
 
 coverage = "^7.6.0"
-
-pydantic-factories = "^1.17.0" # => Use "poly-factory" instead!
-
-# Ships Pydantic, etc.
-aws-lambda-powertools = {extras = ["all"], version = "^2.43.0"}
 
 pytest = "^8.3.0"
 pylint = "^3.2.5"

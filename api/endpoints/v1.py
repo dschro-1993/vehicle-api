@@ -1,6 +1,6 @@
 """V1-Endpoints"""
 
-import env
+from env_vars import COLLECTION_NAME
 
 from datetime import datetime
 
@@ -24,8 +24,6 @@ from models import (
 )
 
 from db import DB
-
-Collection = env.COLLECTION
 
 v1_router = event_handler.api_gateway.Router()
 
@@ -51,7 +49,7 @@ d = DB()
 @v1_router.delete("/<id>")
 def delete_one(id: str) -> None:
   """Todo"""
-  d.delete_one(Collection, {"_id": id})
+  d.delete_one(COLLECTION_NAME, {"_id": id})
   # Idempotent Call => 200
   # {...}
 
@@ -66,7 +64,7 @@ def search(query: FilterCriteria) -> list[VehicleDTO]:
 
   # Todo: Parse query => For unknown Attrs across: Filter, Aggregation, Sort, {...}
 
-  r = d.search(Collection, **query.dict())
+  r = d.search(COLLECTION_NAME, **query.dict())
   return [
     mapper.as_DTO(
       VehicleEntity.parse_obj(x)
@@ -76,7 +74,7 @@ def search(query: FilterCriteria) -> list[VehicleDTO]:
 @v1_router.get("/<id>")
 def search_one(id: str) -> VehicleDTO:
   """Todo"""
-  result = d.search_one(Collection, {"_id": id})
+  result = d.search_one(COLLECTION_NAME, {"_id": id})
   if result is None:
     raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
 
@@ -92,7 +90,7 @@ def update_one(id: str, body: VehicleUpdateRequest) -> VehicleDTO:
   """Todo"""
   update = {**body.dict(exclude_none=True), "UpdatedAt": datetime.now()}
 
-  result = d.update_one(Collection, {"_id": id}, update)
+  result = d.update_one(COLLECTION_NAME, {"_id": id}, update)
   if result is None:
     raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
 
@@ -106,12 +104,12 @@ def update_one(id: str, body: VehicleUpdateRequest) -> VehicleDTO:
 @v1_router.post("/")
 def insert_one(body: VehicleCreateRequest) -> VehicleDTO:
   """Todo"""
-  TracingId = v1_router.current_event["headers"]["X-Amzn-Trace-Id"]
+# TracingId = v1_router.current_event["headers"]["X-Amzn-Trace-Id"]
 
-  create = {**body.dict(exclude_none=True), "TracingId": TracingId}
+  create = {**body.dict(exclude_none=True), "TracingId": "1234567"}
   entity = VehicleEntity.parse_obj(create)
 
-  d.insert_one(Collection, entity.dict(by_alias=True))
+  d.insert_one(COLLECTION_NAME, entity.dict(by_alias=True))
   return (
     mapper.as_DTO(
       entity

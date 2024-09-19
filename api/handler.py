@@ -33,10 +33,10 @@ def _is_valid(Token: str | None) -> bool:
   return False
 
 def swagger_middleware(api: APIGatewayRestResolver, middleware: NextMiddleware) -> Response:
-  Token = api.current_event.headers["Authorization"] # Todo
+  Token = api.current_event.headers["Authorization"]
 # {...}
   if _is_valid(Token):
-    return middleware(api) # => Pass on
+    return middleware(api)
 
   return (
     Response(
@@ -47,7 +47,7 @@ def swagger_middleware(api: APIGatewayRestResolver, middleware: NextMiddleware) 
 api.enable_swagger(
   title   = "Vehicle-API",
   summary = "Vehicle-API {...}",
-  version = "0.1.0-rc", # Todo: Extract from "pyproject.toml"
+  version = "0.1.0", # Todo: Extract from "pyproject.toml"
   middlewares = [swagger_middleware],
 # {...}
 )
@@ -59,7 +59,7 @@ api.include_router(v1_router, prefix = "/v1")
 # {..., prefix = "/v3"}
 
 @tracer.capture_lambda_handler()
-def handler(request: dict, context: LambdaContext) -> dict:
+def _handler(request: dict, context: LambdaContext) -> dict:
   """Entrypoint for Vehicle-API"""
 # context.identity => Can be used for various Python-Decorators like: @PreAuthorize("hasRole('Admin')")
   logger.append_keys(**context.__dict__)

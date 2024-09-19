@@ -1,10 +1,15 @@
 """Models for Vehicle-API"""
 
-import env
 import inspect
+
+from env_vars import (
+  LIMIT_MAXIMUM,
+  LIMIT,
+)
 
 from datetime import datetime
 
+from bson import ObjectId
 from uuid import (
   uuid4,
   UUID,
@@ -42,7 +47,7 @@ class FilterCriteria(BaseModel):
   filter:      dict = {}
   aggregation: dict = {}
   sort:        dict = {}
-  limit:       int  = env.LIMIT # => Todo: MAX_VALUE ...
+  limit:       int  = LIMIT # => Todo: LIMIT_MAXIMUM ...
   skip:        int  = 0
 
 class Shared(BaseModel):
@@ -73,7 +78,7 @@ class VehicleEntity(Shared):
   CreatedAt: datetime = Field(default_factory = datetime.now)
   UpdatedAt: datetime = Field(default_factory = datetime.now)
   TracingId: str
-  Id:        str = Field(default_factory = lambda: f"{uuid4()}", alias = "_id") # Alternative => "from bson import ObjectId"
+  Id:        str = Field(default_factory = lambda: f"{ObjectId()}", alias = "_id") # Alternative => lambda: f"{uuid4()}"
 
 class VehicleDTO(Shared):
   """

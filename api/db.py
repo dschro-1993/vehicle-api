@@ -1,6 +1,12 @@
 """DB for Vehicle-API"""
 
-import env
+import requests
+
+from env_vars import (
+  DB_ENDPOINT,
+  DB_USERNAME,
+  DB_PASSWORD,
+)
 
 from pymongo.errors import PyMongoError
 from pymongo.cursor import Cursor
@@ -14,6 +20,14 @@ from aws_lambda_powertools import (
   Tracer,
 )
 
+tmp_path = "/tmp"
+pem_file = "global-bundle.pem"
+
+pem_path = f"{tmp_path}/{pem_file}"
+req = requests.get(f"https://truststore.pki.rds.amazonaws.com/global/{pem_file}", timeout = 3)
+with open(pem_path, "w") as f:
+  f.write(req.text)
+
 logger = Logger()
 tracer = Tracer()
 
@@ -23,14 +37,19 @@ class DB(): # Todo: metaclass=Singleton
   https://www.mongodb.com/docs/languages/python/pymongo-driver/current/
   """
   def __init__(self) -> None:
-    opts = "uuidRepresentation=standard" # {...}
-    username = get_parameter(env.MONGODB_USERNAME_SSM_PARAMETER)
-    password = get_parameter(env.MONGODB_PASSWORD_SSM_PARAMETER)
-    uri = f"mongodb+srv://{username}:{password}@{env.MONGODB_ENDPOINT}?{opts}"
-    self.db = (
-      MongoClient(uri)
-      ["db"]
-    )
+    try:
+    # username = get_parameter(env.DB_USERNAME_SSM_PARAMETER) # => Fix VPC Interface-Endpoint
+    # password = get_parameter(env.DB_PASSWORD_SSM_PARAMETER)
+      opts = f"tls=true&tlsCAFile={pem_path}&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=true" # {...}
+      conn = f"mongodb://{DB_USERNAME}:{DB_PASSWORD}@{DB_ENDPOINT}?{opts}"
+      self.db = (
+        MongoClient(conn)
+        ["db"]
+      )
+    except PyMongoError as err:
+      logger.exception(err)
+      raise err
+      # {...}
 
   @staticmethod
   def _unload_cursor(cursor: Cursor) -> list[dict]:
