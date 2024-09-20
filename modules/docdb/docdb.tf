@@ -55,7 +55,7 @@ resource "random_password" "password" {
 }
 
 locals {
-  docdb_cluster_creds = { "username" : "dbadmin", "password" : random_password.password.result }
+  docdb_cluster_creds = { "username" : "dbadmin", "password" : random_password.password.result } # Todo: Save and lookup from Vault/SSM => Otherwise it is available in Terraform-State!
 }
 
 resource "aws_ssm_parameter" "docdb_cluster_creds" {
