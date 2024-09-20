@@ -65,11 +65,13 @@ variable "azs" {
 # ---
 
 resource "aws_vpc" "this" {
-  cidr_block = var.cidr_block
+  cidr_block           = var.cidr_block
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   tags = {
     Name = var.name
-  # Type = "..."
+  # {...}
   }
 }
 
@@ -190,6 +192,30 @@ resource "aws_security_group" "tier3_security_group" {
     protocol        = "tcp"
     from_port       = 27017
     to_port         = 27017
+  }
+}
+
+data "aws_vpc_endpoint_service" "ssm" { # => Respects Provider-Region and simplifies lookup!
+  service = "ssm"
+}
+
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id              = aws_vpc.this.id
+  private_dns_enabled = !false
+  service_name        = data.aws_vpc_endpoint_service.ssm.service_name
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [aws_security_group.tier2_ssm_vpce.id]
+  subnet_ids          = aws_subnet.tier2_subnets[*].id
+}
+
+resource "aws_security_group" "tier2_ssm_vpce" {
+  name   = "ssm-vpce"
+  vpc_id = aws_vpc.this.id
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
   }
 }
 
