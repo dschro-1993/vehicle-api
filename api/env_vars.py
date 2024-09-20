@@ -19,13 +19,10 @@ def _env_var(key: str, typecast: Type[T] = str, fallback: T = None) -> T:
 
 #  ---
 
-# DB_USERNAME_SSM_PARAMETER = _env_var("DB_USERNAME_SSM_PARAMETER") # => Fix VPC Interface-Endpoint
-# DB_PASSWORD_SSM_PARAMETER = _env_var("DB_PASSWORD_SSM_PARAMETER")
-
-COLLECTION_NAME = _env_var("COLLECTION_NAME")
-DB_ENDPOINT     = _env_var("DB_ENDPOINT")
-DB_USERNAME     = _env_var("DB_USERNAME")
-DB_PASSWORD     = _env_var("DB_PASSWORD")
+DB_ENDPOINT               = _env_var("DB_ENDPOINT")
+DB_USERNAME_SSM_PARAMETER = _env_var("DB_USERNAME_SSM_PARAMETER")
+DB_PASSWORD_SSM_PARAMETER = _env_var("DB_PASSWORD_SSM_PARAMETER")
+COLLECTION_NAME           = _env_var("COLLECTION_NAME")
 
 LIMIT_MAXIMUM = _env_var("LIMIT_MAXIMUM", int, 10000)
 LIMIT         = _env_var("LIMIT", int, 100)

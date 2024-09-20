@@ -59,8 +59,8 @@ def search(query: FilterCriteria) -> list[VehicleDTO]:
 # {...}
   query.sort = [(key, val) for key, val in query.sort.items()]
 
-# if query.limit and query.limit > env.LIMIT_MAXIUM:
-#    query.limit = env.LIMIT_MAXIUM
+# if query.limit and query.limit > LIMIT_MAXIMUM:
+#    query.limit = LIMIT_MAXIMUM
 
   # Todo: Parse query => For unknown Attrs across: Filter, Aggregation, Sort, {...}
 

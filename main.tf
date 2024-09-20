@@ -33,9 +33,7 @@ module "docdb" {
   security_group_ids = module.vpc.tier3_security_group_ids
   subnet_ids         = module.vpc.tier3_subnets_ids
 
-  db_username_ssm_parameter = "docdb_username"
-  db_password_ssm_parameter = "docdb_password"
-  cluster_identifier        = var.name
+  cluster_identifier = var.name
 }
 
 module "lambda" {
@@ -44,7 +42,16 @@ module "lambda" {
   security_group_ids = module.vpc.tier2_security_group_ids
   subnet_ids         = module.vpc.tier2_subnets_ids
 
-  env_vars                 = merge(local.env_vars, { DB_ENDPOINT = module.docdb.docdb_cluster_endpoint, DB_USERNAME = module.docdb.docdb_cluster_username, DB_PASSWORD = module.docdb.docdb_cluster_password, COLLECTION_NAME = "vehicles" })
+  env_vars = merge(
+    {
+      DB_ENDPOINT               = module.docdb.docdb_cluster_endpoint,
+      DB_USERNAME_SSM_PARAMETER = module.docdb.docdb_cluster_username_ssm_parameter,
+      DB_PASSWORD_SSM_PARAMETER = module.docdb.docdb_cluster_password_ssm_parameter,
+      COLLECTION_NAME           = "Vehicles"
+    },
+  # {...}
+  )
+
   target_group_arn         = module.alb.target_group_arn
   lambda_layer_output_path = "python/"
   lambda_layer_output_file = "requirements.zip"

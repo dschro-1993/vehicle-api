@@ -182,41 +182,15 @@ resource "aws_security_group" "tier2_security_group" {
   }
 }
 
-# resource "aws_vpc_security_group_egress_rule" "tier2_egress_ngws" {
-# # {...}
-#   security_group_id = aws_security_group.tier2_security_group.id
-
-#   cidr_ipv4   = "0.0.0.0/0"
-#   ip_protocol = "-1"
-#   from_port   = 0
-#   to_port     = 0
-# }
-
-# Separate Resource To Avoid circular Dependency!
-# resource "aws_vpc_security_group_egress_rule" "tier2_egress" {
-# # {...}
-#   security_group_id            = aws_security_group.tier2_security_group.id
-#   referenced_security_group_id = aws_security_group.tier3_security_group.id
-
-#   ip_protocol = "tcp"
-#   from_port   = 27017
-#   to_port     = 27017
-# }
-
 resource "aws_security_group" "tier3_security_group" {
   name   = "tier3"
   vpc_id = aws_vpc.this.id
-}
-
-# Separate Resource To Avoid circular Dependency!
-resource "aws_vpc_security_group_ingress_rule" "tier3_ingress" {
-# {...}
-  security_group_id            = aws_security_group.tier3_security_group.id
-  referenced_security_group_id = aws_security_group.tier2_security_group.id
-
-  ip_protocol = "tcp"
-  from_port   = 27017
-  to_port     = 27017
+  ingress {
+    security_groups = [aws_security_group.tier2_security_group.id]
+    protocol        = "tcp"
+    from_port       = 27017
+    to_port         = 27017
+  }
 }
 
 # TODO

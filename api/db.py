@@ -3,9 +3,9 @@
 import requests
 
 from env_vars import (
+  DB_USERNAME_SSM_PARAMETER,
+  DB_PASSWORD_SSM_PARAMETER,
   DB_ENDPOINT,
-  DB_USERNAME,
-  DB_PASSWORD,
 )
 
 from pymongo.errors import PyMongoError
@@ -38,10 +38,10 @@ class DB(): # Todo: metaclass=Singleton
   """
   def __init__(self) -> None:
     try:
-    # username = get_parameter(env.DB_USERNAME_SSM_PARAMETER) # => Fix VPC Interface-Endpoint
-    # password = get_parameter(env.DB_PASSWORD_SSM_PARAMETER)
-      opts = f"tls=true&tlsCAFile={pem_path}&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=true" # {...}
-      conn = f"mongodb://{DB_USERNAME}:{DB_PASSWORD}@{DB_ENDPOINT}?{opts}"
+      username = get_parameter(DB_USERNAME_SSM_PARAMETER)
+      password = get_parameter(DB_PASSWORD_SSM_PARAMETER)
+      opts = f"tls=true&tlsCAFile={pem_path}&readPreference=secondaryPreferred&retryWrites=false" # {...}
+      conn = f"mongodb://{username}:{password}@{DB_ENDPOINT}?{opts}"
       self.db = (
         MongoClient(conn)
         ["db"]
