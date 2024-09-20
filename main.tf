@@ -91,8 +91,9 @@ module "alb" {
 module "waf" {
   source = "./modules/waf"
 
-  wacl_resource_arn = module.alb.alb_arn
-  name              = var.name
+
+  resource_arns = [module.alb.alb_arn]
+  name          = var.name
 }
 
 # {...}
