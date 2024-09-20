@@ -95,31 +95,35 @@ resource "aws_iam_role" "iam_role" {
       }
     ]
   })
-  inline_policy {
-    name = "${var.lambda_name}-policy"
-    policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = [
-        {
-          Resource = "*" # Todo
-          Action   = ["ssm:GetParameters", "ssm:GetParameter", "kms:Decrypt"]
-          Effect   = "Allow"
-        },
-        {
-          Resource = "*" # Todo
-          Action   = ["xray:PutTraceSegments"]
-          Effect   = "Allow"
-        },
-      ]
-    })
-  }
 }
 
-resource "aws_iam_role_policy_attachment" "cwl_attachment" {
-  role       = aws_iam_role.iam_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+resource "aws_iam_role_policy" "iam_role_policy" {
+  name = "custom"
+  role = aws_iam_role.iam_role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Resource = "*" # Todo
+        Action   = ["ssm:GetParameters", "ssm:GetParameter", "kms:Decrypt"]
+        Effect   = "Allow"
+      },
+      {
+        Resource = "*" # Todo
+        Action   = ["xray:PutTraceSegments"]
+        Effect   = "Allow"
+      },
+    ]
+  })
 }
 
+# resource "aws_iam_role_policy_attachment" "cwl_attachment" {
+# role       = aws_iam_role.iam_role.name
+# policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
+# Includes CWL-Permissions already!
 resource "aws_iam_role_policy_attachment" "vpc_attachment" {
   role       = aws_iam_role.iam_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"

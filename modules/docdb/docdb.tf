@@ -1,9 +1,9 @@
 output "docdb_cluster_username_ssm_parameter" {
-  value = aws_ssm_parameter.docdb_cluster_creds[0].name
+  value = aws_ssm_parameter.docdb_cluster_creds["username"].name
 }
 
 output "docdb_cluster_password_ssm_parameter" {
-  value = aws_ssm_parameter.docdb_cluster_creds[1].name
+  value = aws_ssm_parameter.docdb_cluster_creds["password"].name
 }
 
 output "docdb_cluster_endpoint" {
@@ -47,25 +47,20 @@ variable "subnet_ids" {
 # ---
 
 locals {
-  creds = ["username", "password"]
-}
-
-resource "random_string" "docdb_cluster_creds" {
-  count  = length(local.creds)
-  length = 16
+  docdb_cluster_creds = { "username" : "dbadmin", "password" : uuid() }
 }
 
 resource "aws_ssm_parameter" "docdb_cluster_creds" {
-  count = length(local.creds)
-  name  = "${var.cluster_identifier}-docdb-cluster-${local.creds[count.index]}"
-  value = random_string.docdb_cluster_creds[count.index].id
-  type  = "SecureString"
+  for_each = local.docdb_cluster_creds
+  type     = "SecureString"
+  name     = "${var.cluster_identifier}-docdb-cluster-creds-${each.key}"
+  value    = each.value
 }
 
 resource "aws_docdb_cluster" "_cluster" {
-  cluster_identifier           = var.cluster_identifier
-  master_username              = random_string.docdb_cluster_creds[0].id
-  master_password              = random_string.docdb_cluster_creds[1].id
+  cluster_identifier           = "${var.cluster_identifier}-db"
+  master_username              = aws_ssm_parameter.docdb_cluster_creds["username"].value
+  master_password              = aws_ssm_parameter.docdb_cluster_creds["password"].value
   skip_final_snapshot          = !false
   db_subnet_group_name         = aws_docdb_subnet_group._db_subnet_group.name
   vpc_security_group_ids       = var.security_group_ids

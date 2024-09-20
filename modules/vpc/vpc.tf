@@ -69,7 +69,7 @@ resource "aws_vpc" "this" {
 
   tags = {
     Name = var.name
-  # Type = "{....}"
+  # Type = "..."
   }
 }
 

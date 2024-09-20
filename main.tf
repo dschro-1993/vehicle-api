@@ -49,7 +49,7 @@ module "lambda" {
       DB_PASSWORD_SSM_PARAMETER = module.docdb.docdb_cluster_password_ssm_parameter,
       COLLECTION_NAME           = "Vehicles"
     },
-  # {...}
+    # {...}
   )
 
   target_group_arn         = module.alb.target_group_arn
