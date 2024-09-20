@@ -45,15 +45,12 @@ module "lambda" {
   lambda_layer_output_file = "requirements.zip"
   lambda_layer_output_path = "python/"
 
-  env_vars = merge(
-    {
-      DB_ENDPOINT               = module.docdb.docdb_cluster_endpoint,
-      DB_USERNAME_SSM_PARAMETER = module.docdb.docdb_cluster_username_ssm_parameter,
-      DB_PASSWORD_SSM_PARAMETER = module.docdb.docdb_cluster_password_ssm_parameter,
-      COLLECTION_NAME           = "Vehicles"
-    },
-    # {...}
-  )
+  env_vars = {
+    DB_ENDPOINT               = module.docdb.docdb_cluster_endpoint,
+    DB_USERNAME_SSM_PARAMETER = module.docdb.docdb_cluster_username_ssm_parameter,
+    DB_PASSWORD_SSM_PARAMETER = module.docdb.docdb_cluster_password_ssm_parameter,
+    COLLECTION_NAME           = "Vehicles"
+  }
 
   handler       = "handler._handler"
   function_name = var.name
