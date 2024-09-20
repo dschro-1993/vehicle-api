@@ -38,10 +38,11 @@ class DB(): # Todo: metaclass=Singleton
   """
   def __init__(self) -> None:
     try:
-      username = get_parameter(DB_USERNAME_SSM_PARAMETER)
-      password = get_parameter(DB_PASSWORD_SSM_PARAMETER)
-      opts = f"tls=true&tlsCAFile={pem_path}&readPreference=secondaryPreferred&retryWrites=false" # {...}
-      conn = f"mongodb://{username}:{password}@{DB_ENDPOINT}?{opts}"
+      username = get_parameter(DB_USERNAME_SSM_PARAMETER, decrypt = True)
+      password = get_parameter(DB_PASSWORD_SSM_PARAMETER, decrypt = True)
+      opts = f"tls=true&tlsCAFile={pem_path}&retryWrites=false"
+      port = 27017
+      conn = "mongodb://{}:{}@{}:{}?{}".format(username, password, DB_ENDPOINT, port, opts)
       self.db = (
         MongoClient(conn)
         ["db"]

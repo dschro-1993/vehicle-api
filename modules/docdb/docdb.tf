@@ -46,8 +46,16 @@ variable "subnet_ids" {
 
 # ---
 
+resource "random_password" "password" {
+  length  = 32
+  special = false
+# keepers = {
+#   triggers = {...} # => If Rotation is required!
+# }
+}
+
 locals {
-  docdb_cluster_creds = { "username" : "dbadmin", "password" : uuid() }
+  docdb_cluster_creds = { "username" : "dbadmin", "password" : random_password.password.result }
 }
 
 resource "aws_ssm_parameter" "docdb_cluster_creds" {

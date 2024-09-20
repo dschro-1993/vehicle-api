@@ -44,6 +44,10 @@ module "lambda" {
 
   env_vars = merge(
     {
+      POWERTOOLS_SERVICE_NAME   = "${var.name}-service"
+      POWERTOOLS_LOG_LEVEL      = "INFO"
+    },
+    {
       DB_ENDPOINT               = module.docdb.docdb_cluster_endpoint,
       DB_USERNAME_SSM_PARAMETER = module.docdb.docdb_cluster_username_ssm_parameter,
       DB_PASSWORD_SSM_PARAMETER = module.docdb.docdb_cluster_password_ssm_parameter,
