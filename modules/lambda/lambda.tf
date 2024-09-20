@@ -142,7 +142,7 @@ resource "aws_lb_target_group_attachment" "target_group_attachment" {
   count            = var.principal == "elasticloadbalancing.amazonaws.com" ? 1 : 0
   depends_on       = [aws_lambda_permission.lambda_permission]
   target_group_arn = var.source_arn
-  target_id        = aws_lambda_function.my_lambda_function.id
+  target_id        = aws_lambda_function.my_lambda_function.arn
 }
 
 data "aws_region" "current" {}
