@@ -57,8 +57,8 @@ module "lambda" {
 
   handler       = "handler._handler"
   function_name = var.name
-  source_arn    = module.alb.target_group_arn
-  principal     = "elasticloadbalancing.amazonaws.com"
+  source_arn    = module.apigw.execution_arn # module.alb.target_group_arn
+  principal     = "apigateway.amazonaws.com" # "elasticloadbalancing.amazonaws.com"
   code_dir      = "./api"
   root_dir      = "."
 }
@@ -70,27 +70,39 @@ module "acm" {
   zone_name   = var.zone_name
 }
 
-module "alb" {
-  source = "./modules/alb"
+module "apigw" {
+  source = "./modules/apigw"
 
-  vpc_security_group_ids = module.vpc.tier1_security_group_ids
-  subnet_ids             = module.vpc.tier1_subnets_ids
+  qualified_invoke_arn = module.lambda.qualified_invoke_arn
 
   certificate_arn = module.acm.certificate_arn
 
   domain_name = var.domain_name
   zone_name   = var.zone_name
-
-  target_type = "lambda"
-  vpc_id      = module.vpc.vpc_id
   name        = var.name
 }
+
+# module "alb" {
+#   source = "./modules/alb"
+
+#   vpc_security_group_ids = module.vpc.tier1_security_group_ids
+#   subnet_ids             = module.vpc.tier1_subnets_ids
+
+#   certificate_arn = module.acm.certificate_arn
+
+#   domain_name = var.domain_name
+#   zone_name   = var.zone_name
+
+#   target_type = "lambda"
+#   vpc_id      = module.vpc.vpc_id
+#   name        = var.name
+# }
 
 module "waf" {
   source = "./modules/waf"
 
 
-  resource_arns = [module.alb.alb_arn]
+  resource_arns = [module.apigw.stage_arn] # [module.alb.alb_arn]
   name          = var.name
 }
 

@@ -52,7 +52,7 @@ variable "vpc_id" {
 
 # ---
 
-data "aws_route53_zone" "pub" {
+data "aws_route53_zone" "r53_zone" {
   name = var.zone_name
 }
 
@@ -60,10 +60,10 @@ resource "aws_route53_record" "alias_record" {
   alias {
     name    = aws_lb.lb.dns_name
     zone_id = aws_lb.lb. zone_id
-    evaluate_target_health = !false
+    evaluate_target_health = false
   }
   name    = "${var.domain_name}.${var.zone_name}"
-  zone_id = data.aws_route53_zone.pub.zone_id
+  zone_id = data.aws_route53_zone.r53_zone.zone_id
   type    = "A"
 }
 

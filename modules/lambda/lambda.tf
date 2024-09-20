@@ -1,3 +1,9 @@
+output "qualified_invoke_arn" {
+  value = aws_lambda_function.my_lambda_function.qualified_invoke_arn
+}
+
+# ---
+
 variable "vpc_security_group_ids" {
   type = list(string)
 }
