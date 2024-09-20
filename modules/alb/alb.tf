@@ -38,7 +38,7 @@ variable "healthcheck_port" {
   type    = string
 }
 
-variable "security_group_ids" {
+variable "vpc_security_group_ids" {
   type = list(string)
 }
 
@@ -52,18 +52,18 @@ variable "vpc_id" {
 
 # ---
 
-data "aws_route53_zone" "abc" {
+data "aws_route53_zone" "pub" {
   name = var.zone_name
 }
 
 resource "aws_route53_record" "alias_record" {
   alias {
-    name                   = aws_lb.lb.dns_name
-    zone_id                = aws_lb.lb. zone_id
+    name    = aws_lb.lb.dns_name
+    zone_id = aws_lb.lb. zone_id
     evaluate_target_health = !false
   }
-  zone_id = data.aws_route53_zone.abc.zone_id
   name    = "${var.domain_name}.${var.zone_name}"
+  zone_id = data.aws_route53_zone.pub.zone_id
   type    = "A"
 }
 
@@ -75,8 +75,8 @@ resource "aws_lb_target_group" "target_group" {
   lambda_multi_value_headers_enabled = !false
 
   health_check {
-    enabled = false
-    timeout = 10 # Todo: {Value} < `interval` required => Otherwise Exception is Thrown!
+    enabled = false # Todo: λs should expose a "/health-check" Endpoint if "True"
+    timeout = 10    # Todo: {Value} < `interval` required => Otherwise Exception is Thrown!
     path    = var.target_type == "lambda" ? null : var.healthcheck_path
     port    = var.target_type == "lambda" ? null : var.healthcheck_port
   }
@@ -97,7 +97,7 @@ resource "aws_lb_listener" "listener" {
 
 resource "aws_lb" "lb" {
   name            = var.name
-  security_groups = var.security_group_ids
+  security_groups = var.vpc_security_group_ids
   subnets         = var.subnet_ids
 
   # connection_logs {}

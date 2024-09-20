@@ -30,8 +30,8 @@ module "vpc" {
 module "docdb" {
   source = "./modules/docdb"
 
-  security_group_ids = module.vpc.tier3_security_group_ids
-  subnet_ids         = module.vpc.tier3_subnets_ids
+  vpc_security_group_ids = module.vpc.tier3_security_group_ids
+  subnet_ids             = module.vpc.tier3_subnets_ids
 
   cluster_identifier = var.name
 }
@@ -39,14 +39,13 @@ module "docdb" {
 module "lambda" {
   source = "./modules/lambda"
 
-  security_group_ids = module.vpc.tier2_security_group_ids
-  subnet_ids         = module.vpc.tier2_subnets_ids
+  vpc_security_group_ids = module.vpc.tier2_security_group_ids
+  subnet_ids             = module.vpc.tier2_subnets_ids
+
+  lambda_layer_output_file = "requirements.zip"
+  lambda_layer_output_path = "python/"
 
   env_vars = merge(
-    {
-      POWERTOOLS_SERVICE_NAME   = "${var.name}-service"
-      POWERTOOLS_LOG_LEVEL      = "INFO"
-    },
     {
       DB_ENDPOINT               = module.docdb.docdb_cluster_endpoint,
       DB_USERNAME_SSM_PARAMETER = module.docdb.docdb_cluster_username_ssm_parameter,
@@ -56,13 +55,12 @@ module "lambda" {
     # {...}
   )
 
-  target_group_arn         = module.alb.target_group_arn
-  lambda_layer_output_path = "python/"
-  lambda_layer_output_file = "requirements.zip"
-  lambda_handler           = "handler._handler"
-  lambda_name              = var.name
-  code_dir                 = "./api"
-  root_dir                 = "."
+  handler       = "handler._handler"
+  function_name = var.name
+  source_arn    = module.alb.target_group_arn
+  principal     = "elasticloadbalancing.amazonaws.com"
+  code_dir      = "./api"
+  root_dir      = "."
 }
 
 module "acm" {
@@ -75,8 +73,8 @@ module "acm" {
 module "alb" {
   source = "./modules/alb"
 
-  security_group_ids = module.vpc.tier1_security_group_ids
-  subnet_ids         = module.vpc.tier1_subnets_ids
+  vpc_security_group_ids = module.vpc.tier1_security_group_ids
+  subnet_ids             = module.vpc.tier1_subnets_ids
 
   certificate_arn = module.acm.certificate_arn
 

@@ -7,23 +7,32 @@ output "docdb_cluster_password_ssm_parameter" {
 }
 
 output "docdb_cluster_endpoint" {
-  value = aws_docdb_cluster._cluster.endpoint
+  value = aws_docdb_cluster.cluster.endpoint
 }
 
 # ---
 
-variable "preferred_maintenance_window" {
-  default = "sun:04:00-sun:04:30"
+variable "instance_class" {
   type    = string
+  default = "db.t4g.medium"
 }
 
-variable "backup_retention_period" {
-  default = 7
+variable "instance_count" {
   type    = number
+  default = 2
 }
 
-variable "deletion_protection" {
-  default = false # Should be "True" in prod!
+variable "cluster_identifier" {
+  type = string
+}
+
+variable "preferred_maintenance_window" {
+  type    = string
+  default = "sun:04:00-sun:04:30"
+}
+
+variable "skip_final_snapshot" {
+  default = !false
   type    = bool
 }
 
@@ -32,11 +41,7 @@ variable "storage_encrypted" {
   type    = bool
 }
 
-variable "cluster_identifier" {
-  type = string
-}
-
-variable "security_group_ids" {
+variable "vpc_security_group_ids" {
   type = list(string)
 }
 
@@ -47,15 +52,15 @@ variable "subnet_ids" {
 # ---
 
 resource "random_password" "password" {
-  length  = 32
-  special = false
-# keepers = {
+  # keepers = {
 #   triggers = {...} # => If Rotation is required!
 # }
+  special = false
+  length  = 32
 }
 
 locals {
-  docdb_cluster_creds = { "username" : "dbadmin", "password" : random_password.password.result } # Todo: Save and lookup from Vault/SSM => Otherwise it is available in Terraform-State!
+  docdb_cluster_creds = { "username" : "dbadmin", "password" : random_password.password.result } # Alternative: Save and lookup from Vault/SSM => Otherwise it is available in Terraform-State!
 }
 
 resource "aws_ssm_parameter" "docdb_cluster_creds" {
@@ -65,31 +70,28 @@ resource "aws_ssm_parameter" "docdb_cluster_creds" {
   value    = each.value
 }
 
-resource "aws_docdb_cluster" "_cluster" {
-  cluster_identifier           = "${var.cluster_identifier}-db"
+resource "aws_docdb_cluster" "cluster" {
+  cluster_identifier           = var.cluster_identifier
   master_username              = aws_ssm_parameter.docdb_cluster_creds["username"].value
   master_password              = aws_ssm_parameter.docdb_cluster_creds["password"].value
-  skip_final_snapshot          = !false
-  db_subnet_group_name         = aws_docdb_subnet_group._db_subnet_group.name
-  vpc_security_group_ids       = var.security_group_ids
   preferred_maintenance_window = var.preferred_maintenance_window
-  backup_retention_period      = var.backup_retention_period
-  deletion_protection          = var.deletion_protection
+  vpc_security_group_ids       = var.vpc_security_group_ids
+  db_subnet_group_name         = aws_docdb_subnet_group.sgrp.name
+  skip_final_snapshot          = var.skip_final_snapshot
   storage_encrypted            = var.storage_encrypted
-  storage_type                 = "standard"
-  engine                       = "docdb"
+# {...}
 }
 
-resource "aws_docdb_cluster_instance" "_instance" {
-  count                        = 2 # Todo: Variable
+resource "aws_docdb_cluster_instance" "instance" {
+  count                        = var.instance_count
   identifier                   = "${var.cluster_identifier}-instance-${count.index + 1}"
-  instance_class               = "db.t4g.medium" # Todo: Variable
+  cluster_identifier           = aws_docdb_cluster.cluster.cluster_identifier
   preferred_maintenance_window = var.preferred_maintenance_window
-  cluster_identifier           = aws_docdb_cluster._cluster.cluster_identifier
-  engine                       = aws_docdb_cluster._cluster.engine
+  instance_class               = var.instance_class
+# {...}
 }
 
-resource "aws_docdb_subnet_group" "_db_subnet_group" {
+resource "aws_docdb_subnet_group" "sgrp" {
   name       = var.cluster_identifier
   subnet_ids = var.subnet_ids
 }

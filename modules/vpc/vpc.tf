@@ -81,6 +81,7 @@ resource "aws_internet_gateway" "this" {
 
 resource "aws_subnet" "tier1_subnets" {
   count             = length(var.tier1_subnets)
+  tags              = { Name = "tier1-${var.azs[count.index]}" }
   vpc_id            = aws_vpc.this.id
   cidr_block        = var.tier1_subnets[count.index]
   availability_zone = var.azs[count.index]
@@ -88,6 +89,7 @@ resource "aws_subnet" "tier1_subnets" {
 
 resource "aws_subnet" "tier2_subnets" {
   count             = length(var.tier2_subnets)
+  tags              = { Name = "tier2-${var.azs[count.index]}" }
   vpc_id            = aws_vpc.this.id
   cidr_block        = var.tier2_subnets[count.index]
   availability_zone = var.azs[count.index]
@@ -95,6 +97,7 @@ resource "aws_subnet" "tier2_subnets" {
 
 resource "aws_subnet" "tier3_subnets" {
   count             = length(var.tier3_subnets)
+  tags              = { Name = "tier3-${var.azs[count.index]}" }
   vpc_id            = aws_vpc.this.id
   cidr_block        = var.tier3_subnets[count.index]
   availability_zone = var.azs[count.index]
@@ -107,6 +110,7 @@ resource "aws_eip" "eips" {
 
 resource "aws_nat_gateway" "ngws" {
   count         = length(var.tier1_subnets)
+  tags          = { Name = "nat-gateway-${var.azs[count.index]}" }
   allocation_id = aws_eip.eips[count.index].id
   subnet_id     = aws_subnet.tier1_subnets[count.index].id
 }
@@ -117,6 +121,7 @@ resource "aws_route_table" "tier1" {
 
 resource "aws_route_table" "tier2_tables" {
   count  = length(var.tier2_subnets)
+  tags   = { Name = "_tier2-${var.azs[count.index]}" }
   vpc_id = aws_vpc.this.id
 }
 

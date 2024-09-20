@@ -4,6 +4,11 @@ output "certificate_arn" {
 
 # ---
 
+variable "is_wildcard" {
+  default = false
+  type    = bool
+}
+
 variable "zone_name" {
   type = string
 }
@@ -15,16 +20,16 @@ variable "domain_name" {
 # ---
 
 resource "aws_acm_certificate_validation" "certificate_validation" {
-  validation_record_fqdns = [for record in aws_route53_record.record : record.fqdn]
+  validation_record_fqdns = [for validation_record in aws_route53_record.record : validation_record.fqdn]
   certificate_arn         = aws_acm_certificate.certificate.arn
 }
 
 resource "aws_acm_certificate" "certificate" {
-  domain_name       = "${var.domain_name}.${var.zone_name}"
+  domain_name       = "${var.is_wildcard ? "*" : var.domain_name}.${var.zone_name}"
   validation_method = "DNS"
 }
 
-data "aws_route53_zone" "public" {
+data "aws_route53_zone" "pub" {
   name = var.zone_name
 }
 
@@ -37,7 +42,7 @@ resource "aws_route53_record" "record" {
     }
   }
   allow_overwrite = true
-  zone_id         = data.aws_route53_zone.public.zone_id
+  zone_id         = data.aws_route53_zone.pub.zone_id
   records         = [each.value.record]
   name            = each.value.name
   type            = each.value.type

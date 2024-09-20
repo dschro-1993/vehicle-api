@@ -1,9 +1,13 @@
-variable "security_group_ids" {
+variable "vpc_security_group_ids" {
   type = list(string)
 }
 
 variable "subnet_ids" {
   type = list(string)
+}
+
+variable "env_vars" {
+  type = map(any)
 }
 
 variable "root_dir" {
@@ -14,7 +18,11 @@ variable "code_dir" {
   type = string
 }
 
-variable "target_group_arn" {
+variable "principal" {
+  type = string
+}
+
+variable "source_arn" {
   type = string
 }
 
@@ -26,16 +34,12 @@ variable "lambda_layer_output_path" {
   type = string
 }
 
-variable "lambda_handler" {
+variable "function_name" {
   type = string
 }
 
-variable "lambda_name" {
+variable "handler" {
   type = string
-}
-
-variable "env_vars" {
-  type = map(any)
 }
 
 # ---
@@ -58,7 +62,7 @@ resource "null_resource" "custom_requirements" {
 }
 
 resource "aws_s3_bucket" "layer_bucket" {
-  bucket = "${var.lambda_name}-layer-bucket"
+  bucket = "${var.function_name}-layer-bucket"
 }
 
 # {lifecycle-rules}
@@ -73,7 +77,7 @@ resource "aws_s3_object" "layer_object" {
 }
 
 resource "aws_lambda_layer_version" "custom_layer" {
-  layer_name               = "${var.lambda_name}-custom-layer"
+  layer_name               = "${var.function_name}-custom-layer"
   compatible_architectures = ["arm64"]
   compatible_runtimes      = ["python3.12"]
   s3_bucket                = aws_s3_bucket.layer_bucket.id
@@ -83,8 +87,7 @@ resource "aws_lambda_layer_version" "custom_layer" {
 # {...}
 
 resource "aws_iam_role" "iam_role" {
-  name = "${var.lambda_name}-role"
-  path = "/service-role/"
+  name = var.function_name
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -98,9 +101,8 @@ resource "aws_iam_role" "iam_role" {
 }
 
 resource "aws_iam_role_policy" "iam_role_policy" {
-  name = "custom"
+  name = var.function_name
   role = aws_iam_role.iam_role.name
-
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -111,22 +113,16 @@ resource "aws_iam_role_policy" "iam_role_policy" {
       },
       {
         Resource = "*" # Todo
-        Action   = ["xray:PutTraceSegments"]
+        Action   = ["xray:PutTraceSegments"] # Alternative => arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
         Effect   = "Allow"
       },
     ]
   })
 }
 
-# resource "aws_iam_role_policy_attachment" "cwl_attachment" {
-# role       = aws_iam_role.iam_role.name
-# policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
-
-# Includes CWL-Permissions already!
 resource "aws_iam_role_policy_attachment" "vpc_attachment" {
   role       = aws_iam_role.iam_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole" # => Includes CWL-Permissions already!
 }
 
 data "archive_file" "archive" {
@@ -136,24 +132,26 @@ data "archive_file" "archive" {
 }
 
 resource "aws_lambda_permission" "lambda_permission" {
-  source_arn    = var.target_group_arn
-  function_name = aws_lambda_function.lambda.function_name
-  principal     = "elasticloadbalancing.amazonaws.com" # Todo: Variable
   action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.my_lambda_function.function_name
+  source_arn    = var.source_arn
+  principal     = var.principal
 }
 
 resource "aws_lb_target_group_attachment" "target_group_attachment" {
+  count            = var.principal == "elasticloadbalancing.amazonaws.com" ? 1 : 0
   depends_on       = [aws_lambda_permission.lambda_permission]
-  target_group_arn = var.target_group_arn
-  target_id        = aws_lambda_function.lambda.arn
+  target_group_arn = var.source_arn
+  target_id        = aws_lambda_function.my_lambda_function.id
 }
 
 data "aws_region" "current" {}
 
-resource "aws_lambda_function" "lambda" {
-  function_name = "${var.lambda_name}-handler"
+resource "aws_lambda_function" "my_lambda_function" {
+# {...}
+  function_name = var.function_name
 
-  handler = var.lambda_handler
+  handler = var.handler
   runtime = "python3.12"
   timeout = 10
 
@@ -166,7 +164,7 @@ resource "aws_lambda_function" "lambda" {
   ]
 
   vpc_config {
-    security_group_ids = var.security_group_ids
+    security_group_ids = var.vpc_security_group_ids
     subnet_ids         = var.subnet_ids
   }
 
