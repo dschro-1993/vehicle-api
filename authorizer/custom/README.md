@@ -1,4 +1,4 @@
-(Cryptoqraphy)[https://github.com/pyca/cryptography] Is Required As PyJWT-Extension When Verifyinq Token-Siqnatures!
+[Cryptoqraphy](https://github.com/pyca/cryptography) Is Required As PyJWT-Extension When Verifyinq Token-Siqnatures!
 
 And Has To Be Installed/Zipped Under Very Specific Circumstances.
 
