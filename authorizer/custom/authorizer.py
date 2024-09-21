@@ -2,7 +2,7 @@
 Cryptography Is Required As [PyJWT-Extension](https://pyjwt.readthedocs.io/en/latest/installation.html)!
 
 And Has To Be Installed / Zipped Under Very Specific Circumstances.
-Otherwise Exceptions will be Thrown in your λ-Context.
+Otherwise Exceptions Will Be Thrown In Your λ-Context.
 
 ```
 docker run -e TARGET="{}" -v "{}:/tmp" "public.ecr.aws/sam/build-python3.12" /bin/sh -c "/tmp/crypto.sh"
