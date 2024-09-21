@@ -5,7 +5,7 @@ And Has To Be Installed / Zipped Under Very Specific Conditions.
 Otherwise Exceptions Will Be Thrown In Your λ-Context.
 
 ```
-docker run -e TARGET="{}" -v "{}:/tmp" "public.ecr.aws/sam/build-python3.12:latest-arm64" /bin/sh -c "./tmp/crypto.sh"
+docker run -e TARGET="<>" -v "<>:/tmp" "public.ecr.aws/sam/build-python3.12:latest-arm64" /bin/sh -c "./tmp/crypto.sh"
 ```
 
 crypto.sh
@@ -42,9 +42,9 @@ def handler(
   context: dict,
 ) -> dict:
   """https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html"""
-  _jwt    = request["authorizationToken"]
-  effects = "Deny"
-  if _jwt and _is_jwt_valid(_jwt): effects = "Allow"
+  accessToken = request["authorizationToken"]
+  effect      = "Deny"
+  if accessToken and _is_jwt_valid(accessToken): effect = "Allow"
   return {
     "context": {},
     "principalId": "user", # => Could also be extracted from Claims: [username]
@@ -54,25 +54,25 @@ def handler(
         {
           "Action":   "execute-api:Invoke",
           "Resource": request["methodArn"],
-          "Effect":   effects,
+          "Effect":   effect
         },
       ],
     },
   }
 
 
-def _is_jwt_valid(_jwt: str) -> bool:
+def _is_jwt_valid(accessToken: str) -> bool:
   """Makes use of PyJWK and PyJWT To Validate Access-Tokens"""
   key = None
   try:
-    key = jwk.get_signing_key_from_jwt(_jwt)
+    key = jwk.get_signing_key_from_jwt(accessToken)
   except jwt.PyJWKError as ex:
     print(f"JWKError = {ex}")
     return False
 
   try:
     jwt.decode(
-      _jwt,
+      accessToken,
       key.key,
       issuer=issuer,
       algorithms=["RS256"], # https://pyjwt.readthedocs.io/en/latest/usage.html#encoding-decoding-tokens-with-rs256-rsa
