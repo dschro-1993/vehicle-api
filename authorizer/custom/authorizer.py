@@ -42,9 +42,9 @@ def handler(
   context: dict,
 ) -> dict:
   """https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html"""
-  accessToken = request["authorizationToken"]
-  effect      = "Deny"
-  if accessToken and _is_jwt_valid(accessToken): effect = "Allow"
+  jwt     = request["authorizationToken"]
+  effects = "Deny"
+  if jwt and _is_jwt_valid(jwt): effects = "Allow"
   return {
     "context": {},
     "principalId": "user", # => Could also be extracted from Claims: [username]
@@ -54,25 +54,25 @@ def handler(
         {
           "Action":   "execute-api:Invoke",
           "Resource": request["methodArn"],
-          "Effect":   effect
+          "Effect":   effects
         },
       ],
     },
   }
 
 
-def _is_jwt_valid(accessToken: str) -> bool:
-  """Makes use of PyJWK and PyJWT To Validate Access-Tokens"""
+def _is_jwt_valid(jwt: str) -> bool:
+  """Makes use of PyJWK and PyJWT To validate Access-Tokens"""
   key = None
   try:
-    key = jwk.get_signing_key_from_jwt(accessToken)
+    key = jwk.get_signing_key_from_jwt(jwt)
   except jwt.PyJWKError as ex:
     print(f"JWKError = {ex}")
     return False
 
   try:
     jwt.decode(
-      accessToken,
+      jwt,
       key.key,
       issuer=issuer,
       algorithms=["RS256"], # https://pyjwt.readthedocs.io/en/latest/usage.html#encoding-decoding-tokens-with-rs256-rsa
