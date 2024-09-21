@@ -2,7 +2,7 @@
 
 And Has To Be Installed/Zipped Under Very Specific Circumstances.
 
-OTHERWISE IT WILL NOT RUN IN λ-ENVIRONMENTS!
+Otherwise It will NOT Run In Any λ-Environments!
 
 ```
 docker run -e TARGET="{}" -v "{}:/tmp" "public.ecr.aws/sam/build-python3.12" /bin/sh -c "/tmp/crypto.sh"
