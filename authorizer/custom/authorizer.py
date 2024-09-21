@@ -1,7 +1,7 @@
 """
 Cryptography is an optional PyJWT-Extension. See docs here: "https://pyjwt.readthedocs.io/en/latest/installation.html"
 
-And Has To Be Installed / Zipped Under Very Specific Circumstances.
+And Has To Be Installed / Zipped Under Very Specific Conditions.
 Otherwise Exceptions Will Be Thrown In Your λ-Context.
 
 ```
@@ -14,7 +14,6 @@ crypto.sh
 
 cd /tmp
 
-python3 -V
 python3 -m venv .venv && source .venv/bin/activate
 
 python3 -m pip install \
@@ -56,7 +55,7 @@ def handler(
           "Action":   "execute-api:Invoke",
           "Resource": request["methodArn"],
           "Effect":   effects,
-        }
+        },
       ],
     },
   }
