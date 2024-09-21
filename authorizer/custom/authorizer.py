@@ -42,7 +42,7 @@ def handler(
   request: dict,
   context: dict,
 ) -> dict:
-  """Todo"""
+  """https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html"""
   _jwt    = request["authorizationToken"]
   effects = "Deny"
   if _jwt and _is_jwt_valid(_jwt): effects = "Allow"
@@ -63,7 +63,7 @@ def handler(
 
 
 def _is_jwt_valid(_jwt: str) -> bool:
-  """Todo"""
+  """Makes use of PyJWK and PyJWT To Validate Access-Tokens"""
   key = None
   try:
     key = jwk.get_signing_key_from_jwt(_jwt)
