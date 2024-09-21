@@ -6,7 +6,7 @@ from models import (
 )
 
 class Mapper:
-  """Mapper-Class for DDD => https://martinfowler.com/bliki/DomainDrivenDesign.html"""
+  """Mapper-Class for DDD: https://martinfowler.com/bliki/DomainDrivenDesign.html"""
   def as_DTO(self, entity: VehicleEntity, **kwargs) -> VehicleDTO:
     """
     Transforms VehicleEntity => VehicleDTO

@@ -29,7 +29,7 @@ resource "aws_acm_certificate" "certificate" {
   validation_method = "DNS"
 }
 
-data "aws_route53_zone" "pub" {
+data "aws_route53_zone" "r53_zone" {
   name = var.zone_name
 }
 
@@ -42,7 +42,7 @@ resource "aws_route53_record" "record" {
     }
   }
   allow_overwrite = true
-  zone_id         = data.aws_route53_zone.pub.zone_id
+  zone_id         = data.aws_route53_zone.r53_zone.zone_id
   records         = [each.value.record]
   name            = each.value.name
   type            = each.value.type
