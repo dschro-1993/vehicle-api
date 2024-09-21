@@ -20,11 +20,11 @@ from aws_lambda_powertools import (
   Tracer,
 )
 
-tmp_path = "/tmp"
+tmp_path = "/tmp" # => Only writable Path in our λ.
 pem_file = "global-bundle.pem"
 
 pem_path = f"{tmp_path}/{pem_file}"
-req = requests.get(f"https://truststore.pki.rds.amazonaws.com/global/{pem_file}", timeout = 3)
+req = requests.get(f"https://truststore.pki.rds.amazonaws.com/global/{pem_file}", timeout=3)
 with open(pem_path, "w") as f:
   f.write(req.text)
 
@@ -38,8 +38,8 @@ class DB(): # Todo: metaclass=Singleton
   """
   def __init__(self) -> None:
     try:
-      username = get_parameter(DB_USERNAME_SSM_PARAMETER, decrypt = True)
-      password = get_parameter(DB_PASSWORD_SSM_PARAMETER, decrypt = True)
+      username = get_parameter(DB_USERNAME_SSM_PARAMETER, decrypt=True)
+      password = get_parameter(DB_PASSWORD_SSM_PARAMETER, decrypt=True)
       opts = f"tls=true&tlsCAFile={pem_path}&retryWrites=false"
       port = 27017
       conn = "mongodb://{}:{}@{}:{}?{}".format(username, password, DB_ENDPOINT, port, opts)
@@ -88,10 +88,10 @@ class DB(): # Todo: metaclass=Singleton
       # {...}
 
   @tracer.capture_method()
-  def update_one(self, collection_name: str, filter: dict, update: dict) -> None | dict:
+  def search_one_and_update(self, collection_name: str, filter: dict, update: dict) -> None | dict:
     """
     For docs please see here:
-    https://www.mongodb.com/docs/languages/python/pymongo-driver/current/write/update/#update-one-document
+    https://www.mongodb.com/docs/languages/python/pymongo-driver/current/write/update/
     """
     try:
       doc = self.db[collection_name].find_one_and_update(

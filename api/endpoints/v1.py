@@ -54,20 +54,18 @@ def delete_one(id: str) -> None:
   # {...}
 
 @v1_router.get("/search")
-def search(query: FilterCriteria) -> list[VehicleDTO]:
+def search(criteria: FilterCriteria) -> list[VehicleDTO]:
   """Todo"""
 # {...}
-  query.sort = [(key, val) for key, val in query.sort.items()]
+  criteria.sort = [(key, val) for key, val in criteria.sort.items()]
 
-# if query.limit and query.limit > LIMIT_MAXIMUM:
-#    query.limit = LIMIT_MAXIMUM
+# if criteria.limit and criteria.limit > LIMIT_MAXIMUM: # => Could also be handled via Pre-Validator in Pydantic v2!
+#    criteria.limit = LIMIT_MAXIMUM
 
-  # Todo: Parse query => For unknown Attrs across: Filter, Aggregation, Sort, {...}
-
-  r = d.search(COLLECTION_NAME, **query.dict())
+  r = d.search(COLLECTION_NAME, **criteria.dict())
   return [
     mapper.as_DTO(
-      VehicleEntity.parse_obj(x)
+      VehicleEntity.parse_obj(x), # {}
     ) for x in r
   ]
 
@@ -76,43 +74,53 @@ def search_one(id: str) -> VehicleDTO:
   """Todo"""
   result = d.search_one(COLLECTION_NAME, {"_id": id})
   if result is None:
-    raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
+    raise ServiceError(404, f"No Vehicle has been found for '_id={id}'")
 
   entity = VehicleEntity.parse_obj(result)
   return (
     mapper.as_DTO(
-      entity
+      entity,
+    # {}
     )
   )
 
 @v1_router.put("/<id>")
-def update_one(id: str, body: VehicleUpdateRequest) -> VehicleDTO:
+def update_one(id: str, r_body: VehicleUpdateRequest) -> VehicleDTO:
   """Todo"""
-  update = {**body.dict(exclude_none=True), "UpdatedAt": datetime.now()}
+  update = {
+    **r_body.dict(exclude_none=True), # model_dump() in Pydantic v2!
+  # "CreatedAt": datetime.now(),
+    "UpdatedAt": datetime.now(),
+  }
 
-  result = d.update_one(COLLECTION_NAME, {"_id": id}, update)
+  # Atomic Operation
+  result = d.search_one_and_update(COLLECTION_NAME, {"_id": id}, update)
   if result is None:
-    raise ServiceError(404, f"No Vehicle was found in DB for: _id={id}")
+    raise ServiceError(404, f"No Vehicle has been found for '_id={id}'")
 
   entity = VehicleEntity.parse_obj(result)
   return (
     mapper.as_DTO(
-      entity
+      entity,
+    # {}
     )
   )
 
 @v1_router.post("/")
-def insert_one(body: VehicleCreateRequest) -> VehicleDTO:
+def insert_one(r_body: VehicleCreateRequest) -> VehicleDTO:
   """Todo"""
-# TracingId = v1_router.current_event["headers"]["X-Amzn-Trace-Id"]
-
-  create = {**body.dict(exclude_none=True), "TracingId": "1234567"}
-  entity = VehicleEntity.parse_obj(create)
+  insert = {
+    **r_body.dict(),
+    "TracingId": v1_router.current_event["headers"]["X-Amzn-Trace-Id"],
+  # {...}
+  }
+  entity = VehicleEntity.parse_obj(insert)
 
   d.insert_one(COLLECTION_NAME, entity.dict(by_alias=True))
   return (
     mapper.as_DTO(
-      entity
+      entity,
+    # {}
     )
   )
 

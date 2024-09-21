@@ -6,9 +6,9 @@ pythonpath  = "api"
 addopts     = "-ra -v" # -ra => full test summary
 
 [tool.poetry]
-name        = "vehicle-api"
+name        = "api"
 version     = "0.1.0"
-description = "vehicle-api {...}"
+description = "api {...}"
 authors     = ["Schroettinger, Dominik <dominik.schroettinger@devoteam.com>"]
 readme      = "README.md"
 keywords = [

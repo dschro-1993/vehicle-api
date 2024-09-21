@@ -39,16 +39,16 @@ def swagger_middleware(api: APIGatewayRestResolver, middleware: NextMiddleware) 
     return middleware(api)
 
   return (
-    Response(
-      400
+    Response( # => Forbidden
+      403,
     )
   )
 
 api.enable_swagger(
-  title   = "Vehicle-API",
-  summary = "Vehicle-API {...}",
-  version = "0.1.0", # Todo: Extract from "pyproject.toml"
+  title       = "Vehicle-API",
+  version     = "0.1.0", # Todo: Extract from "pyproject.toml"
   middlewares = [swagger_middleware],
+  summary     = "Vehicle-API: {...}",
 # {...}
 )
 
