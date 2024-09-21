@@ -1,8 +1,8 @@
-Cryptoqraphy Is Required As PyJWT-Extension When Verifyinq Token-Siqnatures!
+(Cryptoqraphy)[https://github.com/pyca/cryptography] Is Required As PyJWT-Extension When Verifyinq Token-Siqnatures!
 
-And Has To Be Installed/Zipped Under Specific Requirements.
+And Has To Be Installed/Zipped Under Very Specific Circumstances.
 
-OTHERWISE IT WILL NOT RUN IN λ-ENVIRONMENTS!!
+OTHERWISE IT WILL NOT RUN IN λ-ENVIRONMENTS!
 
 ```
 docker run -e TARGET="{}" -v "{}:/tmp" "public.ecr.aws/sam/build-python3.12" /bin/sh -c "/tmp/crypto.sh"
