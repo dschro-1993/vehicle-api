@@ -35,13 +35,38 @@ COGNITO_REGION      = os.environ["COGNITO_REGION"]
 
 issuer   = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USERPOOL_ID}"
 jwks_url = f"{issuer}/.well-known/jwks.json"
-jwks     = jwt.PyJWKClient(jwks_url)
+jwk      = jwt.PyJWKClient(jwks_url)
 
-def is_valid(_jwt: str) -> bool:
+
+def handler(
+  request: dict,
+  context: dict,
+) -> dict:
+  """Todo"""
+  _jwt    = request["authorizationToken"]
+  effects = "Deny"
+  if _jwt and _is_jwt_valid(_jwt): effects = "Allow"
+  return {
+    "context": {},
+    "principalId": "user", # => Could also be extracted from Claims: [username]
+    "policyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action":   "execute-api:Invoke",
+          "Resource": request["methodArn"],
+          "Effect":   effects,
+        }
+      ],
+    },
+  }
+
+
+def _is_jwt_valid(_jwt: str) -> bool:
   """Todo"""
   key = None
   try:
-    key = jwks.get_signing_key_from_jwt(_jwt)
+    key = jwk.get_signing_key_from_jwt(_jwt)
   except jwt.PyJWKError as ex:
     print(f"JWKError = {ex}")
     return False
