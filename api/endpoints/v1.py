@@ -25,6 +25,8 @@ from models import (
 
 from db import DB
 
+import os
+
 v1_router = event_handler.api_gateway.Router()
 
 mapper = Mapper()
@@ -109,6 +111,7 @@ def update_one(id: str, r_body: VehicleUpdateRequest) -> VehicleDTO:
 @v1_router.post("/")
 def insert_one(r_body: VehicleCreateRequest) -> VehicleDTO:
   """Todo"""
+  logger.info(os.environ["_X_AMZN_TRACE_ID"])
   insert = {
     **r_body.dict(),
     "TracingId": v1_router.current_event["headers"]["X-Amzn-Trace-Id"],

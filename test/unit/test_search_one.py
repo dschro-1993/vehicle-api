@@ -2,7 +2,7 @@ import fixtures as f
 
 from unittest.mock import patch, MagicMock
 
-import api_resolver
+import handler
 import mapper
 import models
 

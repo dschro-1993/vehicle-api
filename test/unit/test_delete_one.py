@@ -1,6 +1,6 @@
 from unittest.mock import patch, MagicMock
 
-import api_resolver
+import handler
 import models
 
 import pytest

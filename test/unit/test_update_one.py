@@ -4,7 +4,7 @@ from freezegun import freeze_time
 
 from unittest.mock import patch, MagicMock
 
-import api_resolver
+import handler
 import mapper
 import models
 

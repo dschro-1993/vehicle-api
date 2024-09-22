@@ -1,11 +1,11 @@
 """
-Cryptoqraphy is an optional PyJWT-Extension. See docs here: "https://pyjwt.readthedocs.io/en/latest/installation.html"
+Cryptoqraphy is a optional PyJWT-Extension. See docs here: "https://pyjwt.readthedocs.io/en/latest/installation.html"
 
 And Has To Be Installed / Zipped Under Very Specific Conditions.
 Otherwise Exceptions Will Be Thrown In Your λ-Context.
 
 ```
-docker run -e TARGET="<>" -v "<>:/tmp" "public.ecr.aws/sam/build-python3.12:latest-arm64" /bin/sh -c "./tmp/crypto.sh"
+docker run -e TARGET="<>" -v "<>:/tmp" "public.ecr.aws/sam/build-python3.12:latest-arm64" /bin/sh -c "/tmp/crypto.sh"
 ```
 
 crypto.sh
@@ -26,15 +26,21 @@ python3 -m pip install \
 {...}
 """
 
-import jwt
 import os
+
+from jwt import (
+  PyJWKClient,
+  PyJWKError,
+  PyJWTError,
+  decode,
+)
 
 COGNITO_USERPOOL_ID = os.environ["COGNITO_USERPOOL_ID"]
 COGNITO_REGION      = os.environ["COGNITO_REGION"]
 
-issuer   = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USERPOOL_ID}"
-jwks_url = f"{issuer}/.well-known/jwks.json"
-jwk      = jwt.PyJWKClient(jwks_url)
+iss     = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USERPOOL_ID}"
+jwk_url = f"{iss}/.well-known/jwks.json"
+jwk     = PyJWKClient(jwk_url)
 
 
 def handler(
@@ -66,15 +72,15 @@ def _is_jwt_valid(jwt: str) -> bool:
   key = None
   try:
     key = jwk.get_signing_key_from_jwt(jwt)
-  except jwt.PyJWKError as ex:
-    print(f"JWKError = {ex}")
+  except (PyJWKError) as ex:
+    print(f"JWKError => {ex}")
     return False
 
   try:
-    jwt.decode(
+    decode(
       jwt,
       key.key,
-      issuer=issuer,
+      issuer=iss,
       algorithms=["RS256"], # https://pyjwt.readthedocs.io/en/latest/usage.html#encoding-decoding-tokens-with-rs256-rsa
       options={
         "verify_signature": True,
@@ -82,8 +88,8 @@ def _is_jwt_valid(jwt: str) -> bool:
         "verify_iss": True,
       },
     )
-  except jwt.PyJWTError as ex:
-    print(f"JWTError = {ex}")
+  except (PyJWTError) as ex:
+    print(f"JWTError => {ex}")
     return False
 
   return True
