@@ -1,0 +1,35 @@
+name: docs
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - name: Check-Out
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install MkDocs
+        run:  pip3 install mkdocs-material
+
+      - run:  mkdocs gh-deploy --force
+        name: Deploy
+
+#     - {...}
+#   {...}
+# {...}

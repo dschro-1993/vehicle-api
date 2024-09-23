@@ -1,0 +1,7 @@
+site_name: Vehicle-API Docs
+theme:
+  name: material
+  font:
+    text: Open Sans
+
+# {...}
